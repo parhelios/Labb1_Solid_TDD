@@ -5,6 +5,9 @@ namespace WebShop.Tests
 {
     public class UnitOfWorkTests
     {
+        //TODO: Skriv om tester i FakeItEasy
+
+        
         [Fact]
         public void NotifyProductAdded_CallsObserverUpdate()
         {
@@ -14,18 +17,18 @@ namespace WebShop.Tests
             // Skapar en mock av INotificationObserver
             var mockObserver = new Mock<INotificationObserver>();
 
-            // Skapar en instans av ProductSubject och lägger till mock-observatören
+            // Skapar en instans av ProductSubject och lï¿½gger till mock-observatï¿½ren
             var productSubject = new ProductSubject();
             productSubject.Attach(mockObserver.Object);
 
-            // Injicerar vårt eget ProductSubject i UnitOfWork
+            // Injicerar vï¿½rt eget ProductSubject i UnitOfWork
             var unitOfWork = new UnitOfWork.UnitOfWork(productSubject);
 
             // Act
             unitOfWork.NotifyProductAdded(product);
 
             // Assert
-            // Verifierar att Update-metoden kallades på vår mock-observatör
+            // Verifierar att Update-metoden kallades pï¿½ vï¿½r mock-observatï¿½r
             mockObserver.Verify(o => o.Update(product), Times.Once);
         }
     }

@@ -6,6 +6,8 @@ using WebShop.Repositories;
 
 public class ProductControllerTests
 {
+    //TODO: Skriv om tester i FakeItEasy
+    
     private readonly Mock<IProductRepository> _mockProductRepository;
     private readonly ProductController _controller;
 
@@ -13,7 +15,7 @@ public class ProductControllerTests
     {
         _mockProductRepository = new Mock<IProductRepository>();
 
-        // Ställ in mock av Products-egenskapen
+        // Stï¿½ll in mock av Products-egenskapen
     }
 
     [Fact]

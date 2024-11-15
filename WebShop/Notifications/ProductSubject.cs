@@ -4,7 +4,7 @@
     public class ProductSubject
     {
         // Lista över registrerade observatörer
-        private readonly List<INotificationObserver> _observers = new List<INotificationObserver>();
+        private readonly List<INotificationObserver> _observers = [];
 
         public void Attach(INotificationObserver observer)
         {
