@@ -1,4 +1,4 @@
-﻿namespace WebShop.Entities;
+﻿namespace WebShop.DataAccess.Entities;
 
 public class OrderProducts
 {

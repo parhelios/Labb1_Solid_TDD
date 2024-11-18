@@ -1,6 +1,6 @@
-﻿using WebShop.Entities;
+﻿using WebShop.Shared.Models;
 
-namespace WebShop.Repositories;
+namespace WebShop.DataAccess.Repositories.Interfaces;
 
 public interface ICustomerRepository : IRepository<Customer>
 {

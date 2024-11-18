@@ -1,4 +1,4 @@
-﻿namespace WebShop;
+﻿namespace WebShop.Shared.Models;
 
 public class Order
 {

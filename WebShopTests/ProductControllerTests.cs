@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using Moq;
-using WebShop;
 using WebShop.Controllers;
-using WebShop.Repositories;
+using WebShop.DataAccess.Repositories.Interfaces;
+
+namespace WebShopTests;
 
 public class ProductControllerTests
 {

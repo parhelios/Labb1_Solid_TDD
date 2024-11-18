@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using WebShop.Notifications;
-using WebShop.UnitOfWork;
+using WebShop.DataAccess.UnitOfWork;
+using WebShop.Shared.Notifications;
 
 
 var builder = WebApplication.CreateBuilder(args);

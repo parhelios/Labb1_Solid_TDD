@@ -1,7 +1,9 @@
-﻿using WebShop.Notifications;
-using WebShop.Repositories;
+﻿using WebShop.DataAccess.Repositories;
+using WebShop.DataAccess.Repositories.Interfaces;
+using WebShop.Shared.Models;
+using WebShop.Shared.Notifications;
 
-namespace WebShop.UnitOfWork
+namespace WebShop.DataAccess.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

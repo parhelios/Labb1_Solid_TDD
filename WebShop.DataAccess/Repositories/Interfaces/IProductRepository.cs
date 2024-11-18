@@ -1,6 +1,6 @@
-﻿using WebShop.Entities;
+﻿using WebShop.Shared.Models;
 
-namespace WebShop.Repositories
+namespace WebShop.DataAccess.Repositories.Interfaces
 {
     // Gränssnitt för produktrepositoryt enligt Repository Pattern
     public interface IProductRepository : IRepository<Entities.Product>

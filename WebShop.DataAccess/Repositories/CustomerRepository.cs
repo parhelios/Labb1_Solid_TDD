@@ -1,6 +1,7 @@
-﻿using WebShop.Entities;
+﻿using WebShop.DataAccess.Repositories.Interfaces;
+using WebShop.Shared.Models;
 
-namespace WebShop.Repositories;
+namespace WebShop.DataAccess.Repositories;
 
 public class CustomerRepository(DbContext context) : ICustomerRepository
 {

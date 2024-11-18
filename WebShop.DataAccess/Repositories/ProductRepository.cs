@@ -1,20 +1,15 @@
-﻿using WebShop.Entities;
+﻿using WebShop.DataAccess.Repositories.Interfaces;
+using WebShop.Shared.Models;
 
-namespace WebShop.Repositories;
+namespace WebShop.DataAccess.Repositories;
 
 public class ProductRepository(DbContext context) : IProductRepository
 {
-    public Task<Entities.Product> GetById(int id)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Entities.Product?> GetById(int id) => context.Products.Find(id);
 
-    public async Task<IEnumerable<Entities.Product>> GetAll()
-    {
-        return context.Products;
-    }
+    public async Task<IEnumerable<Entities.Product>> GetAll() => context.Products;
 
-    public void Add(Entities.Product entity)
+    public async void Add(Entities.Product entity)
     {
         throw new NotImplementedException();
     }

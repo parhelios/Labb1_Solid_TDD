@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebShop.Entities;
+namespace WebShop.DataAccess.Entities;
 
 public class Customer : IEntity
 {
@@ -8,4 +8,5 @@ public class Customer : IEntity
     public int Id { get; }
     public string Name { get; set; }
     public string Email { get; set; }
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }

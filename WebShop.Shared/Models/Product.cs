@@ -1,4 +1,4 @@
-namespace WebShop
+namespace WebShop.Shared.Models
 {
     // Produktmodellen representerar en produkt i webbshoppen
     public class Product
