@@ -19,11 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebShop\WebShop.csproj" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <ProjectReference Include="..\WebShop.DataAccess\WebShop.DataAccess.csproj" />
+    <ProjectReference Include="..\WebShop.Shared\WebShop.Shared.csproj" />
+    <ProjectReference Include="..\WebShop\WebShop.csproj" />
   </ItemGroup>
 
 </Project>

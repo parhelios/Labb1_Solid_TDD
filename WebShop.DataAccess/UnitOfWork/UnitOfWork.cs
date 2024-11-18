@@ -5,7 +5,7 @@ namespace WebShop.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        // Hämta produkter från repository
+        private readonly DbContext _context;
         public IProductRepository Products { get; private set; }
 
         private readonly ProductSubject _productSubject;
@@ -25,6 +25,16 @@ namespace WebShop.UnitOfWork
         public void NotifyProductAdded(Product product)
         {
             _productSubject.Notify(product);
+        }
+        
+        public async Task CommitAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public async void Dispose()
+        {
+            await _context.DisposeAsync();
         }
     }
 }
