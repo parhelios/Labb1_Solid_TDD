@@ -6,10 +6,20 @@ namespace WebShop.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DbContext _context;
-        public IProductRepository Products { get; private set; }
-
         private readonly ProductSubject _productSubject;
-
+        public IProductRepository Products { get; }
+        public ICustomerRepository Customers { get; }
+        public IOrderRepository Orders { get; }
+        
+        public UnitOfWork(DbContext context)
+        {
+            _context = context;
+            
+            Products = new ProductRepository(context);
+            Customers = new CustomerRepository(context);
+            Orders = new OrderRepository(context);
+        }
+        
         // Konstruktor används för tillfället av Observer pattern
         public UnitOfWork(ProductSubject productSubject = null)
         {

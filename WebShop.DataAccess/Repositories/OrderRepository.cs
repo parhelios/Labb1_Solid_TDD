@@ -2,7 +2,7 @@
 
 namespace WebShop.Repositories;
 
-public class OrderRepoitory : IOrderRepoitory
+public class OrderRepository(DbContext context) : IOrderRepository
 {
     public Order GetById(int id)
     {

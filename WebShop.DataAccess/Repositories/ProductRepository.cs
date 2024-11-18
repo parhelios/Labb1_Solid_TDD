@@ -2,7 +2,7 @@
 
 namespace WebShop.Repositories;
 
-public class ProductRepository : IProductRepository
+public class ProductRepository(DbContext context) : IProductRepository
 {
     public Entities.Product GetById(int id)
     {
@@ -25,6 +25,11 @@ public class ProductRepository : IProductRepository
     }
 
     public void Delete(Entities.Product entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateProductAmount(int amount, Product product)
     {
         throw new NotImplementedException();
     }

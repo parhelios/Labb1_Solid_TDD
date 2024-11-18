@@ -2,7 +2,7 @@
 
 namespace WebShop.Repositories;
 
-public interface IOrderRepoitory : IRepository<Order>
+public interface IOrderRepository : IRepository<Order>
 {
     
 }

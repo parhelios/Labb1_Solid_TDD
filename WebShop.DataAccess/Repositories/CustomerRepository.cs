@@ -2,29 +2,29 @@
 
 namespace WebShop.Repositories;
 
-public class CustomerRepository : IOrderRepoitory
+public class CustomerRepository(DbContext context) : ICustomerRepository
 {
-    public Order GetById(int id)
+    public Customer GetById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Order> GetAll()
+    public IEnumerable<Customer> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public void Add(Order entity)
+    public void Add(Customer entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(Order entity)
+    public void Update(Customer entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(Order entity)
+    public void Delete(Customer entity)
     {
         throw new NotImplementedException();
     }
