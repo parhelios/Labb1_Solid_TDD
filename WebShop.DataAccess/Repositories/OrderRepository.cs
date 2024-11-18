@@ -1,9 +1,9 @@
 ﻿using WebShop.DataAccess.Repositories.Interfaces;
-using WebShop.Shared.Models;
+using WebShop.Shared.Entities;
 
 namespace WebShop.DataAccess.Repositories;
 
-public class OrderRepository(DbContext context) : IOrderRepository
+public class OrderRepository(MyDbContext context) : IOrderRepository
 {
     public Task<Order> GetById(int id)
     {

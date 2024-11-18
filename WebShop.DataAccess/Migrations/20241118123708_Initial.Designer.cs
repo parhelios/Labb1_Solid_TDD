@@ -10,7 +10,7 @@ using WebShop;
 
 namespace WebShop.DataAccess.Migrations
 {
-    [DbContext(typeof(DbContext))]
+    [DbContext(typeof(MyDbContext))]
     [Migration("20241118123708_Initial")]
     partial class Initial
     {

@@ -1,23 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebShop.Shared.Entities;
 
 namespace WebShop.DataAccess;
 
-public class DbContext(DbContextOptions options) : Microsoft.EntityFrameworkCore.DbContext(options)
+public class MyDbContext : DbContext
 {
-    public DbSet<Entities.Product> Products { get; set; }
-    public DbSet<Entities.Customer> Customers { get; set; }
-    public DbSet<Entities.Order> Orders { get; set; }
-    public DbSet<Entities.OrderProducts> OrderProducts { get; set; }
+    public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
+    {
+        
+    }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderProducts> OrderProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Entities.Product>().HasKey(p => p.Id);
-        modelBuilder.Entity<Entities.Order>().HasKey(o => o.Id);
-        modelBuilder.Entity<Entities.Customer>().HasKey(c => c.Id);
+        modelBuilder.Entity<Product>().HasKey(p => p.Id);
+        modelBuilder.Entity<Order>().HasKey(o => o.Id);
+        modelBuilder.Entity<Customer>().HasKey(c => c.Id);
         
-        modelBuilder.Entity<Entities.Order>(entity =>
+        modelBuilder.Entity<Order>(entity =>
         {
             entity.HasOne(o => o.Customer)
                 .WithMany(c => c.Orders)
@@ -25,7 +30,7 @@ public class DbContext(DbContextOptions options) : Microsoft.EntityFrameworkCore
                 .IsRequired();
         });
 
-        modelBuilder.Entity<Entities.OrderProducts>(entity =>
+        modelBuilder.Entity<OrderProducts>(entity =>
         {
             entity.HasKey(op => new { op.OrderId, op.ProductId }); 
 
@@ -38,13 +43,13 @@ public class DbContext(DbContextOptions options) : Microsoft.EntityFrameworkCore
                 .HasForeignKey(op => op.ProductId);
         });
         
-        modelBuilder.Entity<Entities.Product>(entity =>
+        modelBuilder.Entity<Product>(entity =>
         {
             entity.Property(p => p.Price).IsRequired();
             entity.Property(p => p.Name).IsRequired().HasMaxLength(100);
         });
 
-        modelBuilder.Entity<Entities.Customer>(entity =>
+        modelBuilder.Entity<Customer>(entity =>
         {
             entity.Property(c => c.Name).IsRequired().HasMaxLength(100);
             entity.Property(c => c.Email).IsRequired().HasMaxLength(100);

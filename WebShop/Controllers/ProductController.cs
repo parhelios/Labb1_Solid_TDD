@@ -1,35 +1,40 @@
 using Microsoft.AspNetCore.Mvc;
-using WebShop.Shared.Models;
+using WebShop.DataAccess.UnitOfWork;
+using WebShop.Shared.Entities;
 
 namespace WebShop.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    public class ProductController(IUnitOfWork uow) : ControllerBase
     {
-        public ProductController()
-        {
-        }
-
         // Endpoint för att hämta alla produkter
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetProducts()
         {
-            // Beh�ver anv�nda repository via Unit of Work för att hämta produkter
-            return Ok();
+            return Ok(uow.ProductRepository.GetAll());
         }
 
         // Endpoint f�r att l�gga till en ny produkt
         [HttpPost]
-        public ActionResult AddProduct(Product product)
+        public IActionResult AddProduct([FromBody]Product product)
         {
-            // L�gger till produkten via repository
+            if (product is null)
+                return BadRequest("Product is null.");
 
-            // Sparar f�r�ndringar
+            try
+            {
+                uow.ProductRepository.Add(product);
+                uow.CommitAsync();
+                uow.NotifyProductAdded(product);
 
-            // Notifierar observat�rer om att en ny produkt har lagts till
-
-            return Ok();
+                return Ok("Product added successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            
         }
     }
 }

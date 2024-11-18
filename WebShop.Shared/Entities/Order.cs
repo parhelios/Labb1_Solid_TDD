@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace WebShop.DataAccess.Entities;
+namespace WebShop.Shared.Entities;
 
 public class Order : IEntity
 {
     [Key]
     public int Id { get; }
     public Customer Customer { get; set; }
+    [JsonIgnore]
     public ICollection<OrderProducts>? Products { get; set; }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebShop.DataAccess.Entities;
+namespace WebShop.Shared.Entities;
 
 public class Product : IEntity
 {

@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using WebShop.DataAccess;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Notifications;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 
@@ -17,7 +17,8 @@ builder.Services.AddTransient<INotificationObserver, EmailNotification>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DbContext>(
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<MyDbContext>(
     options => options.UseSqlServer(connectionString)
 );
 

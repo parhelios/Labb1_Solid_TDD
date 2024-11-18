@@ -1,25 +1,25 @@
 ﻿using WebShop.DataAccess.Repositories.Interfaces;
-using WebShop.Shared.Models;
+using WebShop.Shared.Entities;
 
 namespace WebShop.DataAccess.Repositories;
 
-public class ProductRepository(DbContext context) : IProductRepository
+public class ProductRepository(MyDbContext context) : IProductRepository
 {
-    public async Task<Entities.Product?> GetById(int id) => context.Products.Find(id);
+    public async Task<Product?> GetById(int id) => context.Products.Find(id);
 
-    public async Task<IEnumerable<Entities.Product>> GetAll() => context.Products;
+    public async Task<IEnumerable<Product>> GetAll() => context.Products;
 
-    public async void Add(Entities.Product entity)
+    public async void Add(Product entity)
+    {
+        await context.Products.AddAsync(entity);
+    }
+
+    public void Update(Product entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(Entities.Product entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(Entities.Product entity)
+    public void Delete(Product entity)
     {
         throw new NotImplementedException();
     }

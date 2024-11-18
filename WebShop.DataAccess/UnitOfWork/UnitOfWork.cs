@@ -1,52 +1,45 @@
 ﻿using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.Repositories.Interfaces;
-using WebShop.Shared.Models;
+using WebShop.Shared.Entities;
 using WebShop.Shared.Notifications;
 
-namespace WebShop.DataAccess.UnitOfWork
+namespace WebShop.DataAccess.UnitOfWork;
+
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly MyDbContext _context;
+    private readonly ProductSubject _productSubject;
+    public IProductRepository ProductRepository { get; private set; }
+    public ICustomerRepository CustomerRepository { get; private set;  }
+    public IOrderRepository OrderRepository { get; private set;  }
+        
+    public UnitOfWork(MyDbContext context, ProductSubject productSubject = null)
     {
-        private readonly DbContext _context;
-        private readonly ProductSubject _productSubject;
-        public IProductRepository Products { get; }
-        public ICustomerRepository Customers { get; }
-        public IOrderRepository Orders { get; }
-        
-        public UnitOfWork(DbContext context)
-        {
-            _context = context;
+        _context = context;
             
-            Products = new ProductRepository(context);
-            Customers = new CustomerRepository(context);
-            Orders = new OrderRepository(context);
-        }
+        ProductRepository = new ProductRepository(context);
+        CustomerRepository = new CustomerRepository(context);
+        OrderRepository = new OrderRepository(context);
         
-        // Konstruktor används för tillfället av Observer pattern
-        public UnitOfWork(ProductSubject productSubject = null)
-        {
-            Products = null;
-
-            // Om inget ProductSubject injiceras, skapa ett nytt
-            _productSubject = productSubject ?? new ProductSubject();
-
-            // Registrera standardobservatörer
-            _productSubject.Attach(new EmailNotification());
-        }
-
-        public void NotifyProductAdded(Product product)
-        {
-            _productSubject.Notify(product);
-        }
+        // Om inget ProductSubject injiceras, skapa ett nytt
+        _productSubject = productSubject ?? new ProductSubject();
+        //
+        //     // Registrera standardobservatörer
+        _productSubject.Attach(new EmailNotification());
+    }
         
-        public async Task CommitAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
+    public void NotifyProductAdded(Product product)
+    {
+        _productSubject.Notify(product);
+    }
+        
+    public async Task CommitAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
 
-        public async void Dispose()
-        {
-            await _context.DisposeAsync();
-        }
+    public async void Dispose()
+    {
+        await _context.DisposeAsync();
     }
 }
