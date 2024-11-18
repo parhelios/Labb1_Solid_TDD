@@ -2,29 +2,29 @@
 
 namespace WebShop.Repositories;
 
-public class ProductRepository : IProductRepository
+public class OrderRepoitory : IOrderRepoitory
 {
-    public Entities.Product GetById(int id)
+    public Order GetById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Entities.Product> GetAll()
+    public IEnumerable<Order> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public void Add(Entities.Product entity)
+    public void Add(Order entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(Entities.Product entity)
+    public void Update(Order entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(Entities.Product entity)
+    public void Delete(Order entity)
     {
         throw new NotImplementedException();
     }

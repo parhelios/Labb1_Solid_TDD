@@ -3,7 +3,7 @@
 namespace WebShop.Repositories
 {
     // Gränssnitt för produktrepositoryt enligt Repository Pattern
-    public interface IProductRepository : IRepository<ProductEntity>
+    public interface IProductRepository : IRepository<Entities.Product>
     {
         //TODO: Add CRUD
         // IEnumerable<Product> GetAll(); // Hämtar alla produkter
