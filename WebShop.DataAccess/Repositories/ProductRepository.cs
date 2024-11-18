@@ -4,14 +4,14 @@ namespace WebShop.Repositories;
 
 public class ProductRepository(DbContext context) : IProductRepository
 {
-    public Entities.Product GetById(int id)
+    public Task<Entities.Product> GetById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Entities.Product> GetAll()
+    public async Task<IEnumerable<Entities.Product>> GetAll()
     {
-        throw new NotImplementedException();
+        return context.Products;
     }
 
     public void Add(Entities.Product entity)

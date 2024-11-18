@@ -4,12 +4,12 @@ namespace WebShop.Repositories;
 
 public class CustomerRepository(DbContext context) : ICustomerRepository
 {
-    public Customer GetById(int id)
+    public Task<Customer> GetById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Customer> GetAll()
+    public Task<IEnumerable<Customer>> GetAll()
     {
         throw new NotImplementedException();
     }
