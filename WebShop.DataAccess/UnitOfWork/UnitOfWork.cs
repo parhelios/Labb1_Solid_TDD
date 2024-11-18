@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
-using WebShop.DataAccess.Repositories.Interfaces;
 using WebShop.Shared.Entities;
 using WebShop.Shared.Notifications;
 
