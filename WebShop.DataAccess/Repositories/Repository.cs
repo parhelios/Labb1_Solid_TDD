@@ -1,19 +1,13 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using WebShop.DataAccess.Repositories.Interfaces;
 
 namespace WebShop.DataAccess.Repositories;
 
-public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+public class Repository<TEntity>(MyDbContext context) : IRepository<TEntity>
+    where TEntity : class
 {
-    internal readonly MyDbContext _context;
-    internal readonly DbSet<TEntity> _dbSet;
-
-    public Repository(MyDbContext context)
-    {
-        _context = context;
-        _dbSet = context.Set<TEntity>();
-    }
+    private readonly MyDbContext _context = context;
+    private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
     public async Task<TEntity> GetByIdAsync(int id)
     {
@@ -45,8 +39,8 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         _dbSet.Remove(entity);
     }
 
-    public Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return await _dbSet.Where(predicate).ToListAsync();
     }
 }

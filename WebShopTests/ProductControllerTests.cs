@@ -1,6 +1,6 @@
 using Moq;
 using WebShop.Controllers;
-using WebShop.DataAccess.Repositories.Interfaces;
+using WebShop.DataAccess.Repositories;
 
 namespace WebShopTests;
 

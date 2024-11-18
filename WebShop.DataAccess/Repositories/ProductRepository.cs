@@ -1,12 +1,14 @@
-﻿using WebShop.DataAccess.Repositories.Interfaces;
-using WebShop.Shared.Entities;
+﻿using WebShop.Shared.Entities;
 
 namespace WebShop.DataAccess.Repositories;
 
 public class ProductRepository(MyDbContext context) : Repository<Product>(context), IProductRepository
 {
-    public void UpdateProductAmount(int amount, Product product)
+    public void UpdateProductAmount(int id, int amount)
     {
+        var product = context.Products.Find(id);
+        if (product is null) return;
+
         product.Amount = amount;
         context.Products.Update(product);
     }

@@ -1,5 +1,4 @@
 ﻿using WebShop.DataAccess.Repositories;
-using WebShop.DataAccess.Repositories.Interfaces;
 using WebShop.Shared.Entities;
 
 namespace WebShop.DataAccess.Factory;
