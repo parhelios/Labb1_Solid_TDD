@@ -1,10 +1,13 @@
-﻿namespace WebShop.DataAccess.Repositories.Interfaces;
+﻿using System.Linq.Expressions;
 
-public interface IRepository<T> where T : class
+namespace WebShop.DataAccess.Repositories.Interfaces;
+
+public interface IRepository<TEntity> where TEntity : class
 {
-    Task<T> GetById(int id);
-    Task<IEnumerable<T>> GetAll();
-    void Add(T entity);
-    void Update(T entity);
-    void Delete(T entity);
+    Task<TEntity> GetByIdAsync(int id);
+    Task<IEnumerable<TEntity>> GetAllAsync();
+    Task AddAsync(TEntity entity);
+    Task UpdateAsync(TEntity entity);
+    Task DeleteAsync(int id);
+    Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 }

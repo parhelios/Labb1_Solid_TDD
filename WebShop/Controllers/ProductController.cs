@@ -12,7 +12,9 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
     {
-        return Ok(uow.ProductRepository.GetAll());
+        var products = await uow.Repository<Product>().GetAllAsync();
+
+        return Ok(products);
     }
 
     // Endpoint f�r att l�gga till en ny produkt
@@ -24,7 +26,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
 
         try
         {
-            uow.ProductRepository.Add(product);
+            await uow.Repository<Product>().AddAsync(product);
             await uow.CommitAsync();
             uow.NotifyProductAdded(product);
 

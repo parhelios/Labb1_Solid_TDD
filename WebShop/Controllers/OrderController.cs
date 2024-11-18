@@ -11,6 +11,6 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
     {
-        return Ok(uow.OrderRepository.GetAll());
+        return Ok(uow.Repository<Order>().GetAllAsync());
     }
 }

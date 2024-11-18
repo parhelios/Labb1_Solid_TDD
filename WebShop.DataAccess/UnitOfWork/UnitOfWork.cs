@@ -1,4 +1,5 @@
-﻿using WebShop.DataAccess.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.Repositories.Interfaces;
 using WebShop.Shared.Entities;
 using WebShop.Shared.Notifications;
@@ -8,34 +9,36 @@ namespace WebShop.DataAccess.UnitOfWork;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly MyDbContext _context;
-    private readonly ProductSubject _productSubject;
-    public IProductRepository ProductRepository { get; }
-    public ICustomerRepository CustomerRepository { get; }
-    public IOrderRepository OrderRepository { get; }
-        
-    public UnitOfWork(MyDbContext context, ProductSubject productSubject = null)
+    private readonly Dictionary<Type, object> _repositories = new();
+    private readonly ProductSubject _productSubject = new();
+
+    public UnitOfWork(MyDbContext context)
     {
         _context = context;
-            
-        ProductRepository = new ProductRepository(context);
-        CustomerRepository = new CustomerRepository(context);
-        OrderRepository = new OrderRepository(context);
-        
-        // Om inget ProductSubject injiceras, skapa ett nytt
-        _productSubject = productSubject ?? new ProductSubject();
-        //
-        //     // Registrera standardobservatörer
-        _productSubject.Attach(new EmailNotification());
     }
-        
-    public void NotifyProductAdded(Product product)
+
+    public IRepository<TEntity> Repository<TEntity>() where TEntity : class
     {
-        _productSubject.Notify(product);
+        if (_repositories.Keys.Contains(typeof(TEntity)))
+        {
+            return _repositories[typeof(TEntity)] as IRepository<TEntity>;
+        }
+
+        IRepository<TEntity> repository = new Repository<TEntity>(_context);
+        _repositories.Add(typeof(TEntity), repository);
+
+        return repository;
     }
-        
+
     public async Task CommitAsync()
     {
         await _context.SaveChangesAsync();
+    }
+
+    public async void NotifyProductAdded(Product product)
+    {
+        _productSubject.Notify(product);
+
     }
 
     public async void Dispose()
