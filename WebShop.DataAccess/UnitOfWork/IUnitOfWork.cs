@@ -7,9 +7,7 @@ namespace WebShop.DataAccess.UnitOfWork
     public interface IUnitOfWork : IDisposable
     {
         Task CommitAsync();
-        IProductRepository ProductRepository { get; }
-        ICustomerRepository CustomerRepository { get; }
-        IOrderRepository OrderRepository { get; }
+        IRepository<TEntity> Repository<TEntity>() where TEntity : class;
         void NotifyProductAdded(Product product);
     }
 }

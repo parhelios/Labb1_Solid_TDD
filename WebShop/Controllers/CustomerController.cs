@@ -7,11 +7,11 @@ namespace WebShop.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CustomerController(IUnitOfWork unitOfWork) : ControllerBase
+public class CustomerController(IUnitOfWork uow) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
     {
-        return Ok(await unitOfWork.CustomerRepository.GetAll());
+        return Ok(await uow.Repository<Customer>().GetAllAsync());
     }
 }
