@@ -2,39 +2,38 @@ using Microsoft.AspNetCore.Mvc;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Entities;
 
-namespace WebShop.Controllers
+namespace WebShop.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ProductController(IUnitOfWork uow) : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductController(IUnitOfWork uow) : ControllerBase
+    // Endpoint för att hämta alla produkter
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
     {
-        // Endpoint för att hämta alla produkter
-        [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetProducts()
+        return Ok(uow.ProductRepository.GetAll());
+    }
+
+    // Endpoint f�r att l�gga till en ny produkt
+    [HttpPost]
+    public async Task<IActionResult> AddProduct([FromBody]Product product)
+    {
+        if (product is null)
+            return BadRequest("Product is null.");
+
+        try
         {
-            return Ok(uow.ProductRepository.GetAll());
+            uow.ProductRepository.Add(product);
+            await uow.CommitAsync();
+            uow.NotifyProductAdded(product);
+
+            return Ok("Product added successfully.");
         }
-
-        // Endpoint f�r att l�gga till en ny produkt
-        [HttpPost]
-        public IActionResult AddProduct([FromBody]Product product)
+        catch (Exception ex)
         {
-            if (product is null)
-                return BadRequest("Product is null.");
-
-            try
-            {
-                uow.ProductRepository.Add(product);
-                uow.CommitAsync();
-                uow.NotifyProductAdded(product);
-
-                return Ok("Product added successfully.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
             
-        }
     }
 }
