@@ -1,32 +1,33 @@
-﻿using WebShop.DataAccess.Repositories.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using WebShop.DataAccess.Repositories.Interfaces;
 using WebShop.Shared.Entities;
 
 namespace WebShop.DataAccess.Repositories;
 
 public class CustomerRepository(MyDbContext context) : ICustomerRepository
 {
-    public Task<Customer> GetById(int id)
+    public async Task<Customer> GetById(int id)
     {
-        throw new NotImplementedException();
+        return await context.Customers.FindAsync(id);
     }
 
-    public Task<IEnumerable<Customer>> GetAll()
+    public async Task<IEnumerable<Customer>> GetAll()
     {
-        throw new NotImplementedException();
+        return await context.Customers.ToListAsync();
     }
 
-    public void Add(Customer entity)
+    public async void Add(Customer entity)
     {
-        throw new NotImplementedException();
+        await context.Customers.AddAsync(entity);
     }
 
     public void Update(Customer entity)
     {
-        throw new NotImplementedException();
+         context.Update(entity);
     }
 
-    public void Delete(Customer entity)
+    public async void Delete(Customer entity)
     {
-        throw new NotImplementedException();
+        context.Customers.Remove(entity);
     }
 }

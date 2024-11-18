@@ -14,17 +14,17 @@ public class ProductRepository(MyDbContext context) : IProductRepository
         await context.Products.AddAsync(entity);
     }
 
-    public void Update(Product entity)
+    public async void Update(Product entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(Product entity)
+    public async void Delete(Product entity)
     {
         throw new NotImplementedException();
     }
 
-    public void UpdateProductAmount(int amount, Product product)
+    public async void UpdateProductAmount(int amount, Product product)
     {
         throw new NotImplementedException();
     }

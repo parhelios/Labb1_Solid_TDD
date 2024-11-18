@@ -9,9 +9,9 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly MyDbContext _context;
     private readonly ProductSubject _productSubject;
-    public IProductRepository ProductRepository { get; private set; }
-    public ICustomerRepository CustomerRepository { get; private set;  }
-    public IOrderRepository OrderRepository { get; private set;  }
+    public IProductRepository ProductRepository { get; }
+    public ICustomerRepository CustomerRepository { get; }
+    public IOrderRepository OrderRepository { get; }
         
     public UnitOfWork(MyDbContext context, ProductSubject productSubject = null)
     {
