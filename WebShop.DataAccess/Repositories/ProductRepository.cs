@@ -4,11 +4,12 @@ namespace WebShop.DataAccess.Repositories;
 
 public class ProductRepository(MyDbContext context) : Repository<Product>(context), IProductRepository
 {
-    private readonly MyDbContext _repoContext = context;
-
-    public void UpdateProductAmount(int amount, Product product)
+    public void UpdateProductAmount(int id, int amount)
     {
+        var product = context.Products.Find(id);
+        if (product is null) return;
+
         product.Amount = amount;
-        _repoContext.Products.Update(product);
+        context.Products.Update(product);
     }
 }

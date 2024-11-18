@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Entities;
 
@@ -8,18 +9,25 @@ namespace WebShop.Controllers;
 [Route("api/[controller]")]
 public class ProductController(IUnitOfWork uow) : ControllerBase
 {
-    // Endpoint för att hämta alla produkter
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
     {
-        var products = await uow.Repository<Product>().GetAllAsync();
+        return Ok(uow.Repository<Product>().GetAllAsync());
 
-        return Ok(products);
     }
 
-    // Endpoint f�r att l�gga till en ny produkt
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Product>> GetProductById(int id)
+    {
+        var product = await uow.Repository<Product>().GetByIdAsync(id);
+        if (product is null)
+            return NotFound($"No product with id {id} was found.");
+
+        return Ok(product);
+    }
+
     [HttpPost]
-    public async Task<IActionResult> AddProduct([FromBody]Product product)
+    public async Task<ActionResult> AddProduct([FromBody]Product product)
     {
         if (product is null)
             return BadRequest("Product is null.");
@@ -34,8 +42,81 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
         }
         catch (Exception ex)
         {
+            uow.Dispose();
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
             
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product product)
+    {
+        if (product is null)
+            return BadRequest("Product is null.");
+
+        if (id != product.Id)
+            return BadRequest("ID mismatch.");
+
+        try
+        {
+            await uow.Repository<Product>().UpdateAsync(product);
+            await uow.CommitAsync();
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            uow.Dispose();
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var existingProduct = await uow.Repository<Product>().GetByIdAsync(id);
+        if (existingProduct is null)
+            return NotFound();
+
+        try
+        {
+            await uow.Repository<Product>().DeleteAsync(id);
+            await uow.CommitAsync();
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            uow.Dispose();
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpPatch("{id}/amount")]
+    public async Task<IActionResult> UpdateProductAmount(int id, int amount)
+    {
+        var product = await uow.Repository<Product>().GetByIdAsync(id);
+        if (product is null)
+            return NotFound();
+
+        try
+        {
+            var repo = (IProductRepository)uow.Repository<Product>();
+            repo.UpdateProductAmount(id, amount);
+            await uow.CommitAsync();
+
+            return Ok($"Product amount updated to {amount}.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<Product>>> SearchProducts([FromQuery] string name)
+    {
+        var products = await uow.Repository<Product>().FindAsync(p => p.Name.Contains(name));
+        return Ok(products);
     }
 }
