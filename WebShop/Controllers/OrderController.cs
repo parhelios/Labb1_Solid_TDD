@@ -36,6 +36,7 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
         return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
     }
 
+    [HttpPut("{id}")]
     public async Task<ActionResult> UpdateOrder(int id, [FromBody] Order order)
     {
         if (!ModelState.IsValid)
@@ -54,7 +55,7 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult> DeleteOrder(int id)
     {
         var existingOrder = await uow.Repository<Order>().GetByIdAsync(id);
-        if (existingOrder == null)
+        if (existingOrder is null)
             return NotFound($"No order with id {id} was found.");
 
         await uow.Repository<Order>().DeleteAsync(id);
