@@ -1,4 +1,4 @@
-﻿using WebShop.Shared.Entities;
+﻿using WebShop.Shared.Models;
 
 namespace WebShop.Shared.Notifications
 {

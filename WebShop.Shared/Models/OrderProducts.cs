@@ -1,4 +1,4 @@
-﻿namespace WebShop.Shared.Entities;
+﻿namespace WebShop.Shared.Models;
 
 public class OrderProducts
 {

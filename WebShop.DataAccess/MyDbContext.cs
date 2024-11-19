@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebShop.Shared.Entities;
+using WebShop.Shared.Models;
 
 namespace WebShop.DataAccess;
 

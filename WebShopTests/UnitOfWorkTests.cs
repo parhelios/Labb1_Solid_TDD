@@ -1,5 +1,5 @@
 using Moq;
-using WebShop.Shared.Entities;
+using WebShop.Shared.Models;
 using WebShop.Shared.Notifications;
 
 namespace WebShopTests

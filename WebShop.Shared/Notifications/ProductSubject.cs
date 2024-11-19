@@ -1,4 +1,4 @@
-﻿using WebShop.Shared.Entities;
+﻿using WebShop.Shared.Models;
 
 namespace WebShop.Shared.Notifications
 {
@@ -6,6 +6,7 @@ namespace WebShop.Shared.Notifications
     public class ProductSubject
     {
         // Lista över registrerade observatörer
+        //TODO: SE ÖVER
         private readonly List<INotificationObserver> _observers = [];
 
         public void Attach(INotificationObserver observer)

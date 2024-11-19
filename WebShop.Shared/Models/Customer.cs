@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace WebShop.Shared.Entities;
+namespace WebShop.Shared.Models;
 
 public class Customer : IEntity
 {
