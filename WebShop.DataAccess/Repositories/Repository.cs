@@ -6,7 +6,6 @@ namespace WebShop.DataAccess.Repositories;
 public class Repository<TEntity>(MyDbContext context) : IRepository<TEntity>
     where TEntity : class
 {
-    private readonly MyDbContext _context = context;
     private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
     public async Task<TEntity> GetByIdAsync(int id)

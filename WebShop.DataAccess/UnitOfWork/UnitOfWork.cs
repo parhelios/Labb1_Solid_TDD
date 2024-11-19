@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebShop.DataAccess.Factory;
+﻿using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Models;
 using WebShop.Shared.Notifications;
@@ -28,10 +27,9 @@ public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnit
         await context.SaveChangesAsync();
     }
 
-    public async void NotifyProductAdded(Product product)
+    public void NotifyProductAdded(Product product)
     {
         _productSubject.Notify(product);
-
     }
 
     public async void Dispose()

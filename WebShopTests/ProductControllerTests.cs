@@ -31,8 +31,8 @@ public class ProductControllerTests
         var products = A.CollectionOfDummy<Product>(5);
         A.CallTo(() => _uow.Repository<Product>()).Returns(_repository);
 
-        foreach (var prod in products)
-            await _controller.AddProduct(prod);
+        // foreach (var prod in products)
+        //     await _controller.AddProduct(prod);
 
         // Act
         var result = await _controller.GetProducts();

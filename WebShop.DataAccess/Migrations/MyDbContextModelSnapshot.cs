@@ -21,7 +21,7 @@ namespace WebShop.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebShop.Shared.Entities.Customer", b =>
+            modelBuilder.Entity("WebShop.Shared.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace WebShop.DataAccess.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("WebShop.Shared.Entities.Order", b =>
+            modelBuilder.Entity("WebShop.Shared.Models.Order", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -54,7 +54,7 @@ namespace WebShop.DataAccess.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("WebShop.Shared.Entities.OrderProducts", b =>
+            modelBuilder.Entity("WebShop.Shared.Models.OrderProducts", b =>
                 {
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -69,7 +69,7 @@ namespace WebShop.DataAccess.Migrations
                     b.ToTable("OrderProducts");
                 });
 
-            modelBuilder.Entity("WebShop.Shared.Entities.Product", b =>
+            modelBuilder.Entity("WebShop.Shared.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,9 +93,9 @@ namespace WebShop.DataAccess.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("WebShop.Shared.Entities.Order", b =>
+            modelBuilder.Entity("WebShop.Shared.Models.Order", b =>
                 {
-                    b.HasOne("WebShop.Shared.Entities.Customer", "Customer")
+                    b.HasOne("WebShop.Shared.Models.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -104,15 +104,15 @@ namespace WebShop.DataAccess.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("WebShop.Shared.Entities.OrderProducts", b =>
+            modelBuilder.Entity("WebShop.Shared.Models.OrderProducts", b =>
                 {
-                    b.HasOne("WebShop.Shared.Entities.Order", "Order")
+                    b.HasOne("WebShop.Shared.Models.Order", "Order")
                         .WithMany("Products")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebShop.Shared.Entities.Product", "Product")
+                    b.HasOne("WebShop.Shared.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -123,12 +123,12 @@ namespace WebShop.DataAccess.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WebShop.Shared.Entities.Customer", b =>
+            modelBuilder.Entity("WebShop.Shared.Models.Customer", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("WebShop.Shared.Entities.Order", b =>
+            modelBuilder.Entity("WebShop.Shared.Models.Order", b =>
                 {
                     b.Navigation("Products");
                 });
