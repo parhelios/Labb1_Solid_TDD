@@ -49,7 +49,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product product)
+    public async Task<ActionResult> UpdateProduct(int id, [FromBody] Product product)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

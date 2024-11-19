@@ -1,7 +1,5 @@
 using FakeItEasy;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using WebShop.Controllers;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
@@ -11,8 +9,6 @@ namespace WebShopTests;
 
 public class ProductControllerTests
 {
-    //TODO: Skriv om tester i FakeItEasy
-
     private readonly IUnitOfWork _uow;
     private readonly ProductController _controller;
     private readonly IRepository<Product> _repository;
@@ -153,4 +149,5 @@ public class ProductControllerTests
         // A.CallTo(() => _repository.UpdateAsync(product)).MustHaveHappenedOnceExactly();
         // A.CallTo(() => _uow.CommitAsync()).MustHaveHappenedOnceExactly();
     }
+    
 }

@@ -32,11 +32,11 @@ public class MyDbContext : DbContext
 
         modelBuilder.Entity<OrderProducts>(entity =>
         {
-            entity.HasKey(op => new { op.OrderId, op.ProductId }); 
+            entity.HasKey(op => new { op.Id, op.ProductId }); 
 
             entity.HasOne(op => op.Order)
                 .WithMany(o => o.Products) 
-                .HasForeignKey(op => op.OrderId);
+                .HasForeignKey(op => op.Id);
 
             entity.HasOne(op => op.Product)
                 .WithMany() 

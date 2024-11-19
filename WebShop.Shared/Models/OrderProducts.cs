@@ -1,8 +1,10 @@
-﻿namespace WebShop.Shared.Models;
+﻿using WebShop.Shared.Models.Interfaces;
 
-public class OrderProducts
+namespace WebShop.Shared.Models;
+
+public class OrderProducts : IEntity
 {
-    public int OrderId { get; set; }
+    public int Id { get; set; }
     public Order Order { get; set; }
     public int ProductId { get; set; }
     public Product Product { get; set; }

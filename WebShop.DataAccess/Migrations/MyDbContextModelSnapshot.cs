@@ -56,13 +56,13 @@ namespace WebShop.DataAccess.Migrations
 
             modelBuilder.Entity("WebShop.Shared.Models.OrderProducts", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("Id", "ProductId");
 
                     b.HasIndex("ProductId");
 
@@ -108,7 +108,7 @@ namespace WebShop.DataAccess.Migrations
                 {
                     b.HasOne("WebShop.Shared.Models.Order", "Order")
                         .WithMany("Products")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
