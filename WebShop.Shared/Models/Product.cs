@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WebShop.Shared.Models.Interfaces;
 
 namespace WebShop.Shared.Models;
 
-public class Product : IEntity
+public class Product : IProduct
 {
     [Key]
     public int Id { get; }

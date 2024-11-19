@@ -1,6 +1,8 @@
+using FakeItEasy;
 using Moq;
 using WebShop.Shared.Models;
 using WebShop.Shared.Notifications;
+using Times = Moq.Times;
 
 namespace WebShopTests
 {
@@ -13,12 +15,7 @@ namespace WebShopTests
         public void NotifyProductAdded_CallsObserverUpdate()
         {
             // Arrange
-            var product = new Product
-            {
-                Name = null,
-                Price = 0,
-                Amount = 0
-            };
+            var product = A.Dummy<Product>();
 
             // Skapar en mock av INotificationObserver
             var mockObserver = new Mock<INotificationObserver>();

@@ -1,4 +1,4 @@
-﻿namespace WebShop.Shared.Models;
+﻿namespace WebShop.Shared.Models.Interfaces;
 
 public interface IEntity
 {

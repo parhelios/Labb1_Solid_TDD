@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using WebShop.Shared.Models.Interfaces;
 
 namespace WebShop.Shared.Models;
 
