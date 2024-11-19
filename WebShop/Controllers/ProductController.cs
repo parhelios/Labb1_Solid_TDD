@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using WebShop.DataAccess;
+using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
+using WebShop.DataAccess.Strategy_Pattern;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
 
@@ -7,7 +11,7 @@ namespace WebShop.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController(IUnitOfWork uow) : ControllerBase
+public class ProductController(IUnitOfWork uow, IRepositoryFactory factory) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
@@ -100,14 +104,19 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     [HttpPatch("{id}/amount")]
     public async Task<IActionResult> UpdateProductAmount(int id, int amount)
     {
-        var product = await uow.Repository<Product>().GetByIdAsync(id);
+        uow.AddStrategy(new DefaultRepositoryStrategy<Product>(factory));
+        var repoTest = uow.Repository<Product>();
+
+        var product = await repoTest.GetByIdAsync(id);
         if (product is null)
             return NotFound();
 
         try
         {
-            var repo = uow.Repository<Product>() as IProductRepository;            
-            repo.UpdateProductAmount(id, amount);
+            uow.AddStrategy(new SpecialRepositoryStrategy<ProblemDetails>(factory));
+            var repo = (SpecialProductRepository)uow.Repository<Product>();
+            await repo.UpdateProductAmount(id, amount);
+
             await uow.CommitAsync();
 
             return Ok($"Product amount updated to {amount}.");

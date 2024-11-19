@@ -1,6 +1,9 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebShop.Controllers;
+using WebShop.DataAccess;
+using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
@@ -10,13 +13,14 @@ namespace WebShopTests;
 public class ProductControllerTests
 {
     private readonly IUnitOfWork _uow;
+    private readonly IRepositoryFactory _factory;
     private readonly ProductController _controller;
     private readonly IRepository<Product> _repository;
 
     public ProductControllerTests()
     {
         _uow = A.Fake<IUnitOfWork>();
-        _controller = new ProductController(_uow);
+        _controller = new ProductController(_uow, _factory);
         _repository = A.Fake<IRepository<Product>>();
     }
 
@@ -172,12 +176,23 @@ public class ProductControllerTests
     public async Task UpdateProductAmount_ReturnsOkResult()
     {
         // Arrange
-        var product = A.Dummy<Product>();
+        //var product = A.Dummy<Product>();
+        var product = new Product
+        {
+            Name = "Test Product",
+            Price = 10,
+            Amount = 5
+        };
+        var tempContext = new MyDbContext(new DbContextOptions<MyDbContext>());
+        var tempFactory = new RepositoryFactory(tempContext);
+        var tempUow = new UnitOfWork(tempContext, tempFactory);
+        var tempController = new ProductController(tempUow, tempFactory);
         // A.CallTo(() => _repository.GetByIdAsync(product.Id)).Returns(Task.FromResult(product));
         // A.CallTo(() => _uow.Repository<Product>()).Returns(_repository);
 
         // Act
-        var result = await _controller.UpdateProductAmount(product.Id, 10);
+        //var result = await _controller.UpdateProductAmount(product.Id, 10);
+        var result = await tempController.UpdateProductAmount(1, 10);
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
