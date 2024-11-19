@@ -12,8 +12,8 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
     {
-        return Ok(uow.Repository<Product>().GetAllAsync());
-
+        var products = await uow.Repository<Product>().GetAllAsync();
+        return Ok(products);
     }
 
     [HttpGet("{id}")]
