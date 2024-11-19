@@ -13,6 +13,10 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
     {
         var products = await uow.Repository<Product>().GetAllAsync();
+
+        if (!products.Any())
+            return NotFound(new List<Product>());
+        
         return Ok(products);
     }
 
@@ -20,7 +24,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
         var product = await uow.Repository<Product>().GetByIdAsync(id);
-        if (product is null)
+        if (product is null || product.Id != id)
             return NotFound($"No product with id {id} was found.");
 
         return Ok(product);
@@ -31,6 +35,9 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
+
+        if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0)
+            return BadRequest("Invalid product data.");
 
         try
         {
@@ -53,15 +60,14 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-
-        if (id != product.Id)
-            return BadRequest("ID mismatch.");
+        
+        if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0)
+            return BadRequest("Invalid product data.");
 
         try
         {
             await uow.Repository<Product>().UpdateAsync(product);
             await uow.CommitAsync();
-
             return Ok($"Product {id} updated successfully.");
         }
         catch (Exception ex)
@@ -76,13 +82,12 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     {
         var existingProduct = await uow.Repository<Product>().GetByIdAsync(id);
         if (existingProduct is null)
-            return NotFound();
+            return NotFound($"No product with id {id} was found.");
 
         try
         {
             await uow.Repository<Product>().DeleteAsync(id);
             await uow.CommitAsync();
-
             return Ok($"Product {existingProduct.Name} deleted successfully.");
         }
         catch (Exception ex)

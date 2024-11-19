@@ -11,7 +11,8 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
     {
-        return Ok(uow.Repository<Order>().GetAllAsync());
+        var order = await uow.Repository<Order>().GetAllAsync();
+        return Ok(order);
     }
 
     [HttpGet("{id}")]
@@ -33,7 +34,7 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
         await uow.Repository<Order>().AddAsync(order);
         await uow.CommitAsync();
 
-        return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+        return CreatedAtAction(nameof(AddOrder), new { id = order.Id }, order);
     }
 
     [HttpPut("{id}")]
@@ -48,7 +49,7 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
         await uow.Repository<Order>().UpdateAsync(order);
         await uow.CommitAsync();
 
-        return NoContent();
+        return Ok();
     }
 
     [HttpDelete("{id}")]
@@ -61,7 +62,7 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
         await uow.Repository<Order>().DeleteAsync(id);
         await uow.CommitAsync();
 
-        return NoContent();
+        return Ok();
     }
 
     [HttpGet("search")]

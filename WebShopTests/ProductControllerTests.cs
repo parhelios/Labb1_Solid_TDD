@@ -19,7 +19,7 @@ public class ProductControllerTests
         _controller = new ProductController(_uow);
         _repository = A.Fake<IRepository<Product>>();
     }
-    
+
     [Fact]
     public async Task AddProduct_ReturnsOkResult()
     {
@@ -35,6 +35,24 @@ public class ProductControllerTests
 
         A.CallTo(() => _repository.AddAsync(product)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _uow.CommitAsync()).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task AddProduct_WithInvalidData_ReturnsBadRequestResult()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Name = null,
+            Price = -1,
+            Amount = 5
+        };
+
+        // Act
+        var result = await _controller.AddProduct(product);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]
@@ -63,6 +81,23 @@ public class ProductControllerTests
     }
 
     [Fact]
+    public async Task GetProducts_WithNoProductsInDb_ReturnsOkResult_WithEmptyList()
+    {
+        // Arrange
+        A.CallTo(() => _repository.GetAllAsync()).Returns(Task.FromResult((IEnumerable<Product>)new List<Product>()));
+        A.CallTo(() => _uow.Repository<Product>()).Returns(_repository);
+
+        // Act
+        var result = await _controller.GetProducts();
+
+        // Assert
+        var okResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        var returnedProducts = Assert.IsAssignableFrom<IEnumerable<Product>>(okResult.Value);
+        Assert.Empty(returnedProducts);
+        A.CallTo(() => _uow.Repository<Product>().GetAllAsync()).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
     public async Task GetProductById_ReturnsOkResult_WithAProduct()
     {
         // Arrange
@@ -81,7 +116,7 @@ public class ProductControllerTests
         Assert.Equal(product, returnedProduct);
         A.CallTo(() => _uow.Repository<Product>().GetByIdAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UpdateProduct_ReturnsOkResult()
     {
@@ -98,7 +133,7 @@ public class ProductControllerTests
         A.CallTo(() => _repository.UpdateAsync(product)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _uow.CommitAsync()).MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task DeleteProduct_ReturnsOkResult()
     {
@@ -115,7 +150,7 @@ public class ProductControllerTests
         A.CallTo(() => _repository.DeleteAsync(product.Id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _uow.CommitAsync()).MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task DeleteProduct_ReturnsNotFoundResult()
     {
@@ -132,7 +167,7 @@ public class ProductControllerTests
         A.CallTo(() => _repository.DeleteAsync(product.Id)).MustNotHaveHappened();
         A.CallTo(() => _uow.CommitAsync()).MustNotHaveHappened();
     }
-    
+
     [Fact]
     public async Task UpdateProductAmount_ReturnsOkResult()
     {
@@ -149,5 +184,4 @@ public class ProductControllerTests
         // A.CallTo(() => _repository.UpdateAsync(product)).MustHaveHappenedOnceExactly();
         // A.CallTo(() => _uow.CommitAsync()).MustHaveHappenedOnceExactly();
     }
-    
 }
