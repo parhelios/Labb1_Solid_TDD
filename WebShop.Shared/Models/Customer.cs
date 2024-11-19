@@ -8,7 +8,9 @@ public class Customer : IEntity
 {
     [Key]
     public int Id { get; }
+    [Required]
     public string Name { get; set; }
+    [Required]
     public string Email { get; set; }
     [JsonIgnore]
     public ICollection<Order> Orders { get; set; } = new List<Order>();

@@ -29,8 +29,8 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> AddProduct([FromBody]Product product)
     {
-        if (product is null)
-            return BadRequest("Product is null.");
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
         try
         {
@@ -51,8 +51,8 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product product)
     {
-        if (product is null)
-            return BadRequest("Product is null.");
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
         if (id != product.Id)
             return BadRequest("ID mismatch.");
@@ -62,7 +62,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
             await uow.Repository<Product>().UpdateAsync(product);
             await uow.CommitAsync();
 
-            return NoContent();
+            return Ok($"Product {id} updated successfully.");
         }
         catch (Exception ex)
         {
@@ -83,7 +83,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
             await uow.Repository<Product>().DeleteAsync(id);
             await uow.CommitAsync();
 
-            return NoContent();
+            return Ok($"Product {existingProduct.Name} deleted successfully.");
         }
         catch (Exception ex)
         {
@@ -101,7 +101,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
 
         try
         {
-            var repo = (IProductRepository)uow.Repository<Product>();
+            var repo = uow.Repository<Product>() as IProductRepository;            
             repo.UpdateProductAmount(id, amount);
             await uow.CommitAsync();
 
