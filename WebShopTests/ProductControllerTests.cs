@@ -72,7 +72,7 @@ public class ProductControllerTests
             Price = -1,
             Amount = 5
         };
-        _controller.ModelState.AddModelError("Name", "Name is required.");
+        //_controller.ModelState.AddModelError("Name", "Name is required.");
 
         // Act
         var result = await _controller.AddProduct(product);
