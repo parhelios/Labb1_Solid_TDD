@@ -7,11 +7,11 @@ namespace WebShop.Shared.Models;
 public class Product : IProduct
 {
     [Key]
-    public int Id { get; }
-    [Required]
+    public int Id { get; init; }
+    [Required(AllowEmptyStrings = false), MinLength(2)]
     public string Name { get; set; }
-    [Required, Range(0.00, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
+    [Required(AllowEmptyStrings = false), Range(0.00, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
     public double Price { get; set; }
-    [Required, DefaultValue(1)]
+    [Required(AllowEmptyStrings = false), DefaultValue(1)]
     public int Amount { get; set; }
 }

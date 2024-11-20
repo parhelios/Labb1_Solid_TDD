@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
 
@@ -28,8 +29,13 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> AddCustomer([FromBody] Customer customer)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        //if (!ModelState.IsValid)
+        //    return BadRequest(ModelState);
+
+        const string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+        if (!Regex.IsMatch(customer.Email, emailPattern))
+            return BadRequest("Invalid email address");
 
         await uow.Repository<Customer>().AddAsync(customer);
         await uow.CommitAsync();
@@ -40,8 +46,8 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateCustomer(int id, [FromBody] Customer customer)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        //if (!ModelState.IsValid)
+        //    return BadRequest(ModelState);
 
         if (id != customer.Id)
             return BadRequest("ID mismatch");

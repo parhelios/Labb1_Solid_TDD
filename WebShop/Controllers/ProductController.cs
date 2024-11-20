@@ -16,7 +16,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
 
         if (!products.Any())
             return NotFound(new List<Product>());
-        
+
         return Ok(products);
     }
 
@@ -31,10 +31,10 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> AddProduct([FromBody]Product product)
+    public async Task<ActionResult> AddProduct([FromBody] Product product)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        //if (!ModelState.IsValid)
+        //    return BadRequest(ModelState);
 
         if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0)
             return BadRequest("Invalid product data.");
@@ -52,16 +52,15 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
             uow.Dispose();
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
-            
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateProduct(int id, [FromBody] Product product)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-        
-        if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0)
+        //if (!ModelState.IsValid)
+        //    return BadRequest(ModelState);
+
+        if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0 || product.Amount < 0)
             return BadRequest("Invalid product data.");
 
         try
@@ -97,31 +96,35 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
         }
     }
 
-    [HttpPatch("{id}/amount")]
-    public async Task<IActionResult> UpdateProductAmount(int id, int amount)
-    {
-        var product = await uow.Repository<Product>().GetByIdAsync(id);
-        if (product is null)
-            return NotFound();
+    //[HttpPatch("{id}/amount")]
+    //public async Task<IActionResult> UpdateProductAmount(int id, int amount)
+    //{
+    //    var product = await uow.Repository<Product>().GetByIdAsync(id);
+    //    if (product is null)
+    //        return NotFound();
 
-        try
-        {
-            var repo = uow.Repository<Product>() as IProductRepository;            
-            repo.UpdateProductAmount(id, amount);
-            await uow.CommitAsync();
+    //    try
+    //    {
+    //        var repo = uow.Repository<Product>() as IProductRepository;            
+    //        repo.UpdateProductAmount(id, amount);
+    //        await uow.CommitAsync();
 
-            return Ok($"Product amount updated to {amount}.");
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
+    //        return Ok($"Product amount updated to {amount}.");
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return StatusCode(500, $"Internal server error: {ex.Message}");
+    //    }
+    //}
 
     [HttpGet("search")]
     public async Task<ActionResult<IEnumerable<Product>>> SearchProducts([FromQuery] string name)
     {
         var products = await uow.Repository<Product>().FindAsync(p => p.Name.Contains(name));
+
+        if (!products.Any())
+            return NotFound(new List<Product>());
+
         return Ok(products);
     }
 }

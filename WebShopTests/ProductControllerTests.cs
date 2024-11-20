@@ -1,3 +1,4 @@
+using System.Collections;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -67,10 +68,11 @@ public class ProductControllerTests
         // Arrange
         var product = new Product
         {
-            Name = null,
+            Name = string.Empty,
             Price = -1,
             Amount = 5
         };
+        _controller.ModelState.AddModelError("Name", "Name is required.");
 
         // Act
         var result = await _controller.AddProduct(product);
@@ -116,7 +118,7 @@ public class ProductControllerTests
     }
     
     [Fact]
-    public async Task GetProductById_ReturnsOkResult_WithAProduct()
+    public async Task GetProductById_WithValidId_ReturnsOkResultWithAProduct()
     {
         // Arrange
         var product = A.Dummy<Product>();
@@ -133,6 +135,25 @@ public class ProductControllerTests
         var returnedProduct = Assert.IsAssignableFrom<Product>(okResult.Value);
         Assert.Equal(product, returnedProduct);
         A.CallTo(() => _fakeUow.Repository<Product>().GetByIdAsync(product.Id)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task GetProductById_WithInvalidId_ReturnsNotFoundResult()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Name = "Test Product",
+            Price = 10,
+            Amount = 5
+        };
+        await _controller.AddProduct(product);
+
+        // Act
+        var result = await _controller.GetProductById(999);
+
+        // Assert
+        Assert.IsType<NotFoundObjectResult>(result.Result);
     }
 
     [Fact]
@@ -209,23 +230,124 @@ public class ProductControllerTests
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
-        
     }
 
-    //[Fact]
-    //public async Task UpdateProductAmount_ReturnsOkResult()
-    //{
-    //    // Arrange
-    //    var product = A.Dummy<Product>();
-    //    // A.CallTo(() => _fakeRepository.GetByIdAsync(product.Id)).Returns(Task.FromResult(product));
-    //    // A.CallTo(() => _fakeUow.Repository<Product>()).Returns(_fakeRepository);
+    [Fact]
+    public async Task DeleteProduct_WithFailedDbConnection_ThrowsAggregateException()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 111,
+            Name = "Delete Test Product",
+            Price = 10,
+            Amount = 5
+        };
 
-    //    // Act
-    //    var result = await _fakeController.UpdateProductAmount(product.Id, 10);
+        await _controller.AddProduct(product);
+        await _context.Database.EnsureDeletedAsync();
 
-    //    // Assert
-    //    Assert.IsType<OkObjectResult>(result);
-    //    // A.CallTo(() => _fakeRepository.UpdateAsync(product)).MustHaveHappenedOnceExactly();
-    //    // A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
-    //}
+        // Act
+        var result = await _controller.DeleteProduct(product.Id);
+        var exception = result as ObjectResult;
+
+        // Assert
+        Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, exception.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateProductAmount_WithValidAmount_ReturnsOkResult()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 123,
+            Name = "UpdateTest Product",
+            Price = 10,
+            Amount = 5
+        };
+
+        await _controller.AddProduct(product);
+        product.Amount = 10;
+
+        // Act
+        var result = await _controller.UpdateProduct(product.Id, product);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task UpdateProductAmount_WithInvalidAmount_ReturnsOkResult()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 123,
+            Name = "UpdateTest Product",
+            Price = 10,
+            Amount = 5
+        };
+
+        await _controller.AddProduct(product);
+        product.Amount = -5;
+
+        // Act
+        var result = await _controller.UpdateProduct(product.Id, product);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task SearchProducts_WithValidName_ReturnsOkResult()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Name = "SearchTest Product",
+            Price = 10,
+            Amount = 5
+        };
+
+        await _controller.AddProduct(product);
+
+        // Act
+        var result = await _controller.SearchProducts(product.Name);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result.Result);
+        var okResult = result.Result as OkObjectResult;
+
+        Assert.NotNull(okResult);
+        Assert.IsAssignableFrom<IEnumerable<Product>>(okResult.Value);
+
+        var resultProducts = okResult.Value as IEnumerable<Product>;
+        Assert.Contains(product, resultProducts);
+    }
+
+    [Fact]
+    public async Task SearchProducts_WithInvalidName_ReturnsNotFound_WithEmptyList()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Name = "SearchTest Product",
+            Price = 10,
+            Amount = 5
+        };
+
+        await _controller.AddProduct(product);
+        var invalidName = "Invalid Name";
+
+        // Act
+        var result = await _controller.SearchProducts(invalidName);
+
+        // Assert
+        Assert.IsType<NotFoundObjectResult>(result.Result);
+        var notFoundResult = result.Result as NotFoundObjectResult;
+        Assert.NotNull(notFoundResult);
+        Assert.Empty(notFoundResult.Value as IEnumerable<Product>);
+    }
 }

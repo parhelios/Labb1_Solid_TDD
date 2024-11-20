@@ -28,8 +28,8 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> AddOrder([FromBody] Order order)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        //if (!ModelState.IsValid)
+        //    return BadRequest(ModelState);
 
         await uow.Repository<Order>().AddAsync(order);
         await uow.CommitAsync();
@@ -40,8 +40,8 @@ public class OrderController(IUnitOfWork uow) : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateOrder(int id, [FromBody] Order order)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        //if (!ModelState.IsValid)
+        //    return BadRequest(ModelState);
 
         if (id != order.Id)
             return BadRequest("ID mismatch");
