@@ -8,6 +8,7 @@ namespace WebShop.DataAccess.UnitOfWork
     {
         Task CommitAsync();
         IRepository<TEntity> Repository<TEntity>() where TEntity : class;
+        //TODO: Flytta?
         void NotifyProductAdded(Product product);
     }
 }

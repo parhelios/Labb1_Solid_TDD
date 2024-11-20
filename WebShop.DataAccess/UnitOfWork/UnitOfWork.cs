@@ -29,6 +29,7 @@ public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnit
 
     public void NotifyProductAdded(Product product)
     {
+        //TODO: Flytta?
         _productSubject.Notify(product);
     }
 

@@ -1,7 +1,6 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using WebShop.Controllers;
 using WebShop.DataAccess;
 using WebShop.DataAccess.Factory;
