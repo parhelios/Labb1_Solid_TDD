@@ -95,4 +95,28 @@ public class CustomerControllerTests
         //Assert
         Assert.IsType<BadRequestObjectResult>(result);
     }
+
+    [Fact]
+    public async Task UpdateCustomer_WithValidData_ReturnsOkResult()
+    {
+        // Arrange
+        var customer = new Customer
+        {
+            Id = 1,
+            Name = "Kurt Kenneth",
+            Email = "a@a.a"
+        };
+
+        await _controller.AddCustomer(customer);
+
+        customer.Name = "Kurt Kenneth Jr.";
+
+        //Act
+        var result = await _controller.UpdateCustomer(1, customer);
+
+        //Assert
+        Assert.IsType<OkResult>(result);
+        var updatedUser = _context.Customers.Find(1);
+        Assert.Equal("Kurt Kenneth Jr.", updatedUser.Name);
+    }
 }

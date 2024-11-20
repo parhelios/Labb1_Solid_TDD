@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
@@ -36,6 +37,9 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
         //if (!ModelState.IsValid)
         //    return BadRequest(ModelState);
 
+        if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
+            return BadRequest("Invalid product data.");
+
         if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0)
             return BadRequest("Invalid product data.");
 
@@ -57,6 +61,9 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateProduct(int id, [FromBody] Product product)
     {
+        if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
+            return BadRequest();
+
         //if (!ModelState.IsValid)
         //    return BadRequest(ModelState);
 

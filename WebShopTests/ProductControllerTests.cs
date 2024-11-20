@@ -82,6 +82,24 @@ public class ProductControllerTests
     }
 
     [Fact]
+    public async Task AddProduct_WithInvalidInput_ReturnsBadRequest()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Name = "T",
+            Amount = 20,
+            Price = 30
+        };
+
+        // Act
+        var result = await _controller.AddProduct(product);
+
+        // Assert
+        Assert.IsAssignableFrom<BadRequestResult>(result);
+    }
+
+    [Fact]
     public async Task GetProducts_ReturnsOkResult_WithAListOfProducts()
     {
         // Arrange
@@ -180,6 +198,75 @@ public class ProductControllerTests
     }
 
     [Fact]
+    public async Task UpdateProduct_WithInvalidInput_ReturnsBadRequest()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 123,
+            Name = "UpdateTest Product",
+            Price = 10,
+            Amount = 5
+        };
+
+        await _controller.AddProduct(product);
+
+        product.Name = "U";
+        product.Price = -10;
+        product.Amount = 10;
+        
+        // Act
+        var result = await _controller.UpdateProduct(product.Id, product);
+
+        // Assert
+        Assert.IsAssignableFrom<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public async Task UpdateProductAmount_WithValidAmount_ReturnsOkResult()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 123,
+            Name = "UpdateTest Product",
+            Price = 10,
+            Amount = 5
+        };
+
+        await _controller.AddProduct(product);
+        product.Amount = 10;
+
+        // Act
+        var result = await _controller.UpdateProduct(product.Id, product);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task UpdateProductAmount_WithInvalidAmount_ReturnsOkResult()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 123,
+            Name = "UpdateTest Product",
+            Price = 10,
+            Amount = 5
+        };
+
+        await _controller.AddProduct(product);
+        product.Amount = -5;
+
+        // Act
+        var result = await _controller.UpdateProduct(product.Id, product);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
     public async Task DeleteProduct_ReturnsOkResult()
     {
         // Arrange
@@ -254,50 +341,6 @@ public class ProductControllerTests
         // Assert
         Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, exception.StatusCode);
-    }
-
-    [Fact]
-    public async Task UpdateProductAmount_WithValidAmount_ReturnsOkResult()
-    {
-        // Arrange
-        var product = new Product
-        {
-            Id = 123,
-            Name = "UpdateTest Product",
-            Price = 10,
-            Amount = 5
-        };
-
-        await _controller.AddProduct(product);
-        product.Amount = 10;
-
-        // Act
-        var result = await _controller.UpdateProduct(product.Id, product);
-
-        // Assert
-        Assert.IsType<OkObjectResult>(result);
-    }
-
-    [Fact]
-    public async Task UpdateProductAmount_WithInvalidAmount_ReturnsOkResult()
-    {
-        // Arrange
-        var product = new Product
-        {
-            Id = 123,
-            Name = "UpdateTest Product",
-            Price = 10,
-            Amount = 5
-        };
-
-        await _controller.AddProduct(product);
-        product.Amount = -5;
-
-        // Act
-        var result = await _controller.UpdateProduct(product.Id, product);
-
-        // Assert
-        Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]

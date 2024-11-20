@@ -7,7 +7,8 @@ namespace WebShop.Shared.Models;
 public class Customer : IEntity
 {
     [Key]
-    public int Id { get; }
+    public int Id { get; init; }
+
     [Required(AllowEmptyStrings = false)]
     public string Name { get; set; }
     [Required(AllowEmptyStrings = false), EmailAddress]
