@@ -1,23 +1,16 @@
 using FakeItEasy;
-using Microsoft.EntityFrameworkCore;
-using WebShop.DataAccess.Factory;
-using WebShop.DataAccess;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
-using WebShop.Controllers;
 
 namespace WebShopTests
 {
     public class UnitOfWorkTests
     {
-        //TODO: Skriv om tester i FakeItEasy
-
         private readonly IUnitOfWork _fakeUow = A.Fake<IUnitOfWork>();
         private readonly IRepository<Product> _fakeProductRepository = A.Fake<IRepository<Product>>();
         private readonly IRepository<Customer> _fakeCustomerRepository = A.Fake<IRepository<Customer>>();
         private readonly IRepository<Order> _fakeOrderRepository = A.Fake<IRepository<Order>>();
-
 
         [Fact]
         public async Task CallsUnitOfWork_ReturnsRepository_OfTypeProduct()

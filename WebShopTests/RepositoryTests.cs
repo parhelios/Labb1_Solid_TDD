@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebShop.Controllers;
-using WebShop.DataAccess.Factory;
-using WebShop.DataAccess.UnitOfWork;
 using WebShop.DataAccess;
-using FakeItEasy;
-using Microsoft.AspNetCore.Mvc;
 using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Models;
 using WebShopTests.TestData;
@@ -24,7 +19,6 @@ public class RepositoryTests
         
         _dbContext = new MyDbContext(options);
         _repository = new Repository<Product>(_dbContext);
-
     }
     
     [Fact]
@@ -38,7 +32,7 @@ public class RepositoryTests
             Price = 11,
             Amount = 5
         };
-
+        
         // Act
         await _repository.AddAsync(product);
         await _dbContext.SaveChangesAsync();
@@ -47,6 +41,44 @@ public class RepositoryTests
         var addedProduct = await _dbContext.Products.FindAsync(1);
         Assert.NotNull(addedProduct);
         Assert.Equal("Product Add Test", addedProduct.Name);
+        
+        await _dbContext.Database.EnsureDeletedAsync();
+    }
+    
+    [Theory]
+    [ClassData(typeof(ProductTestData))]
+    public async Task AddAsync_WithMultipleValidItems_ShouldAddEntityToDbSet(object input)
+    {
+        var products = input switch
+        {
+            Product singleProduct => new List<Product> { singleProduct },
+            Product[] productArray => new List<Product>(productArray),
+            _ => throw new ArgumentException("Invalid input type")
+        };
+ 
+        // Act
+        List<Product> productsInDbList = [];
+        
+        foreach (var p in products)
+        {
+            await _repository.AddAsync(p);
+            await _dbContext.SaveChangesAsync();
+            
+            var result = await _dbContext.Products.FindAsync(p.Id);
+            productsInDbList.Add(result);
+     
+            // Assert
+            Assert.NotNull(result);
+        }
+        
+        //Additional Assert
+        Assert.Equal(products.Count, productsInDbList.Count);
+        Assert.All(productsInDbList, (product, index) =>
+        {
+            Assert.Equal(products[index].Name, product.Name);
+            Assert.Equal(products[index].Price, product.Price);
+            Assert.Equal(products[index].Amount, product.Amount);
+        });
         
         await _dbContext.Database.EnsureDeletedAsync();
     }
@@ -192,7 +224,7 @@ public class RepositoryTests
 
     [Theory]
     [ClassData(typeof(ProductTestData))]
-    public async Task TaskFindAsyndicate_WithValidId_ShouldReturnCorrectProduct(object input)
+    public async Task FindAsync_WithValidId_ShouldReturnCorrectProduct(object input)
     {
         //Arrange
         var products = input switch
@@ -216,6 +248,45 @@ public class RepositoryTests
         Assert.Equal(products[0].Price, result.Price); 
         Assert.Equal(products[0].Amount, result.Amount); 
         
+        await _dbContext.Database.EnsureDeletedAsync();
+    }
+    
+    [Theory]
+    [ClassData(typeof(ProductAndIdTestData))]
+    public async Task FindAsync_WithNonExistentId_ShouldReturnNull(object input, int[] ids)
+    {
+        //Arrange
+        var products = input switch
+        {
+            Product singleProduct => new List<Product> { singleProduct },
+            Product[] productArray => new List<Product>(productArray),
+            _ => throw new ArgumentException("Invalid input type")
+        };
+        
+        foreach (var p in products)
+            await _repository.AddAsync(p);
+        await _dbContext.SaveChangesAsync();
+        
+        //Act
+        Product? result;
+
+        foreach (var id in ids)
+        {
+            result = await _dbContext.Products.FindAsync(id);
+            //Assert: Verify that the result is null since the ID doesn't exist
+            Assert.Null(result);
+        }
+        
+        // Additional assertion: Ensure that the database contains the correct products
+        foreach (var p in products)
+        {
+            var retrievedProduct = await _dbContext.Products.FindAsync(p.Id);
+            Assert.NotNull(retrievedProduct);
+            Assert.Equal(p.Id, retrievedProduct.Id);
+            Assert.Equal(p.Name, retrievedProduct.Name);
+            Assert.Equal(p.Price, retrievedProduct.Price);
+        }
+       
         await _dbContext.Database.EnsureDeletedAsync();
     }
 }

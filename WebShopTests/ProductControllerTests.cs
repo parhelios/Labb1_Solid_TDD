@@ -1,4 +1,3 @@
-using System.Collections;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -318,7 +317,6 @@ public class ProductControllerTests
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
-
     }
 
     [Fact]
