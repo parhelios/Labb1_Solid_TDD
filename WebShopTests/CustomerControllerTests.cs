@@ -54,6 +54,8 @@ public class CustomerControllerTests
         //Assert
         Assert.IsType<CreatedAtActionResult>(result);
         Assert.Contains(customer, _context.Customers);
+        
+        await _context.Database.EnsureDeletedAsync();
     }
 
     [Fact]
@@ -94,6 +96,7 @@ public class CustomerControllerTests
 
         //Assert
         Assert.IsType<BadRequestObjectResult>(result);
+        await _context.Database.EnsureDeletedAsync();
     }
 
     [Fact]
@@ -118,5 +121,7 @@ public class CustomerControllerTests
         Assert.IsType<OkResult>(result);
         var updatedUser = _context.Customers.Find(1);
         Assert.Equal("Kurt Kenneth Jr.", updatedUser.Name);
+        
+        await _context.Database.EnsureDeletedAsync();
     }
 }

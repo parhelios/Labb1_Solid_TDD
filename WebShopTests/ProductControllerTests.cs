@@ -220,6 +220,39 @@ public class ProductControllerTests
         // Assert
         Assert.IsAssignableFrom<BadRequestResult>(result);
     }
+    
+    // [Fact]
+    public async Task UpdateProduct_WithValidInput_ReturnsOkResult()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 123,
+            Name = "UpdateTest Product",
+            Price = 10,
+            Amount = 5
+        };
+
+        await _controller.AddProduct(product);
+
+        var productToUpdate = new Product
+        {
+            Id = 123,
+            Name = "UpdateTest Product NOW UPDATED",
+            Price = 20,
+            Amount = 10
+        };
+        
+        // Act
+        var result = await _controller.UpdateProduct(productToUpdate.Id, productToUpdate);
+
+        // Assert
+        var updatedProduct = await _uow.Repository<Product>().GetByIdAsync(productToUpdate.Id);
+        Assert.IsAssignableFrom<OkObjectResult>(result);
+        Assert.Equal(productToUpdate, updatedProduct);
+        
+        await _context.Database.EnsureDeletedAsync();
+    }
 
     [Fact]
     public async Task UpdateProductAmount_WithValidAmount_ReturnsOkResult()
@@ -241,10 +274,12 @@ public class ProductControllerTests
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
+        var updatedProduct = await _uow.Repository<Product>().GetByIdAsync(product.Id);
+        Assert.Equal(product, updatedProduct);
     }
 
     [Fact]
-    public async Task UpdateProductAmount_WithInvalidAmount_ReturnsOkResult()
+    public async Task UpdateProductAmount_WithInvalidAmount_ReturnsBadRequest()
     {
         // Arrange
         var product = new Product
@@ -262,7 +297,7 @@ public class ProductControllerTests
         var result = await _controller.UpdateProduct(product.Id, product);
 
         // Assert
-        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.IsType<BadRequestResult>(result);
     }
 
     [Fact]

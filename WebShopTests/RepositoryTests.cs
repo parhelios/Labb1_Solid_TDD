@@ -40,7 +40,7 @@ public class RepositoryTests
         // Assert
         var addedProduct = await _dbContext.Products.FindAsync(1);
         Assert.NotNull(addedProduct);
-        Assert.Equal("Product Add Test", addedProduct.Name);
+        Assert.Same(product, addedProduct);
         
         await _dbContext.Database.EnsureDeletedAsync();
     }
@@ -57,7 +57,7 @@ public class RepositoryTests
         };
  
         // Act
-        List<Product> productsInDbList = [];
+        List<Product?> productsInDbList = [];
         
         foreach (var p in products)
         {
@@ -78,6 +78,7 @@ public class RepositoryTests
             Assert.Equal(products[index].Name, product.Name);
             Assert.Equal(products[index].Price, product.Price);
             Assert.Equal(products[index].Amount, product.Amount);
+            Assert.Same(products[index], product);
         });
         
         await _dbContext.Database.EnsureDeletedAsync();
@@ -104,6 +105,60 @@ public class RepositoryTests
         //Asser
         Assert.NotNull(productInDb);
         Assert.Equal("Product Add Test", productInDb.Name);
+        Assert.Same(productInDb, product);
+        
+        await _dbContext.Database.EnsureDeletedAsync();
+    }
+    
+    [Fact]
+    public async Task GetByIdAsync_WithInvalidId_ShouldReturnNull()
+    {
+        //Arrange
+        var product = new Product
+        {
+            Id = 1,
+            Name = "Product Add Test",
+            Price = 11,
+            Amount = 5
+        };
+        
+        await _repository.AddAsync(product);
+        await _dbContext.SaveChangesAsync();
+        
+        //Act
+        var productInDb = await _dbContext.Products.FindAsync(678);
+        
+        //Asser
+        Assert.Null(productInDb);
+        
+        await _dbContext.Database.EnsureDeletedAsync();
+    }
+    
+    [Theory]
+    [InlineData(2)]
+    [InlineData(-2)]
+    [InlineData(111)]
+    [InlineData(999999)]
+    [InlineData(5782)]
+    public async Task GetByIdAsync_WithMultipleInvalidId_ShouldReturnNull(int input)
+    {
+        //Arrange
+        var product = new Product
+        {
+            Id = 1,
+            Name = "Product Add Test",
+            Price = 11,
+            Amount = 5
+        };
+        
+        await _repository.AddAsync(product);
+        await _dbContext.SaveChangesAsync();
+        
+        //Act
+        var productInDb = await _dbContext.Products.FindAsync(input);
+        
+        //Asser
+        Assert.Null(productInDb);
         
         await _dbContext.Database.EnsureDeletedAsync();
     }
@@ -131,6 +186,14 @@ public class RepositoryTests
         Assert.NotNull(result);
         Assert.NotEmpty(result);
         Assert.Equal(products.Count, result.Count());
+        
+        //Additional Assert
+        Assert.All(result, (product, index) =>
+        {
+            Assert.Equal(products[index].Name, product.Name);
+            Assert.Equal(products[index].Price, product.Price);
+            Assert.Equal(products[index].Amount, product.Amount);
+        });
         
         await _dbContext.Database.EnsureDeletedAsync();
     }
@@ -233,6 +296,7 @@ public class RepositoryTests
             Product[] productArray => new List<Product>(productArray),
             _ => throw new ArgumentException("Invalid input type")
         };
+        
         
         foreach (var p in products)
             await _repository.AddAsync(p);
