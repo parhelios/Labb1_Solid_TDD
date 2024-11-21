@@ -96,7 +96,7 @@ public class ProductControllerTests
         var result = await _controller.AddProduct(product);
 
         // Assert
-        Assert.IsAssignableFrom<BadRequestResult>(result);
+        Assert.IsAssignableFrom<BadRequestObjectResult>(result);
     }
 
     [Fact]
@@ -306,6 +306,7 @@ public class ProductControllerTests
         // Arrange
         var product = new Product
         {
+            Id = 1,
             Name = "Test Product",
             Price = 10,
             Amount = 5
@@ -317,6 +318,7 @@ public class ProductControllerTests
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
+
     }
 
     [Fact]
