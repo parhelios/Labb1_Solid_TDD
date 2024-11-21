@@ -1,7 +1,10 @@
 using FakeItEasy;
+using Microsoft.EntityFrameworkCore;
+using WebShop.DataAccess;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
+using WebShop.Shared.Notifications;
 
 namespace WebShopTests
 {
@@ -57,25 +60,24 @@ namespace WebShopTests
             A.CallTo(() => _fakeUow.Repository<Order>().AddAsync(order)).MustHaveHappenedOnceExactly();
         }
 
-        // [Fact]
-        // public async Task NotifyProductAdded_CallsObserverUpdate()
-        // {
-        //     // Arrange
-        //     var dummyProduct = A.Dummy<Product>();
-        //
-        //     var mockObserver = A.Fake<INotificationObserver>();
-        //
-        //     var productSubject = new ProductSubject();
-        //     productSubject.Attach(mockObserver);
-        //
-        //     var unitOfWork = new UnitOfWork(productSubject);
-        //
-        //     // Act
-        //     // unitOfWork.NotifyProductAdded(product);
-        //
-        //     // Assert
-        //     // Verifierar att Update-metoden kallades p� v�r mock-observat�r
-        //     mockObserver.Verify(o => o.Update(product), Times.Once);
-        // }
+        [Fact]
+        public async Task NotifyProductAdded_CallsObserverUpdate()
+        {
+            // Arrange
+            var dummyProduct = A.Dummy<Product>();
+        
+            var mockObserver = A.Fake<INotificationObserver>();
+        
+            var productSubject = new ProductSubject();
+            productSubject.Attach(mockObserver);
+        
+            // Act
+            _fakeUow.NotifyProductAdded(dummyProduct);
+        
+            // Assert
+            // Verifierar att Update-metoden kallades p� v�r mock-observat�r
+            // mockObserver.Verify(o => o.Update(product), Times.Once);
+            // mockObserver.Verify(o => o.Update(dummyProduct, Times.Once));
+        }
     }
 }
