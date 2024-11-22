@@ -8,8 +8,7 @@ public class Customer : IEntity
 {
     [Key]
     public int Id { get; init; }
-
-    [Required(AllowEmptyStrings = false)]
+    [Required(AllowEmptyStrings = false), MinLength(2)]
     public string Name { get; set; }
     [Required(AllowEmptyStrings = false), EmailAddress]
     public string Email { get; set; }

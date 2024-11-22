@@ -66,7 +66,7 @@ namespace WebShopTests
             // Arrange
             var dummyProduct = A.Dummy<Product>();
         
-            var mockObserver = A.Fake<INotificationObserver>();
+            var mockObserver = A.Fake<INotificationObserver<Product>>();
         
             var productSubject = new ProductSubject();
             productSubject.Attach(mockObserver);

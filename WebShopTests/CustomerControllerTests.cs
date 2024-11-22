@@ -47,6 +47,7 @@ public class CustomerControllerTests
             Name = "Kurt Kenneth",
             Email = "a@a.a"
         };
+        A.CallTo(() => _fakeRepository.AddAsync(customer)).Returns(Task.CompletedTask);
 
         //Act
         var result = await _fakeController.AddCustomer(customer);
@@ -55,32 +56,12 @@ public class CustomerControllerTests
         Assert.IsType<CreatedAtActionResult>(result);
         Assert.Equal(customer, ((CreatedAtActionResult)result).Value);
         
-        await _context.Database.EnsureDeletedAsync();
+        A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _fakeUow.NotifyCustomerAdded(customer)).MustHaveHappenedOnceExactly();
     }
-
+    
     [Fact]
-    public async Task AddCustomer_WithValidData_ReturnsOkResult_FakeItEasy()
-    {
-        // Arrange
-        var customer = new Customer
-        {
-            Name = "Kurt Kenneth",
-            Email = "a@a.a"
-        }; 
-        A.CallTo(() => _fakeUow.Repository<Customer>()).Returns(_fakeRepository);
-        A.CallTo(() => _fakeRepository.AddAsync(customer)).Returns(Task.CompletedTask);
-
-        //Act
-        var result = await _fakeController.AddCustomer(customer);
-
-        //Assert
-        Assert.IsType<CreatedAtActionResult>(result);
-        A.CallTo(() => _fakeUow.Repository<Customer>()).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _fakeRepository.AddAsync(customer)).MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task AddCustomer_WithInvalidData_ReturnsBadRequest()
+    public async Task AddCustomer_WithInvalidEmail_ReturnsBadRequest()
     {
         // Arrange
         var customer = new Customer
@@ -88,14 +69,114 @@ public class CustomerControllerTests
             Name = "Kurt Kenneth",
             Email = "a"
         };
-
-        //_controller.ModelState.AddModelError("Email", "Invalid email");
-
+        
         //Act
         var result = await _controller.AddCustomer(customer);
 
         //Assert
         Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(400, ((BadRequestObjectResult)result).StatusCode);
+        Assert.Equal("Invalid customer data.", ((BadRequestObjectResult)result).Value);
+
+        await _context.Database.EnsureDeletedAsync();
+    }
+    
+    [Fact]
+    public async Task AddCustomer_WhenRepositoryThrowsException_ReturnsInternalServerError()
+    {
+        // Arrange
+        var customer = new Customer
+        {
+            Name = "Kurt Kenneth",
+            Email = "a@a.a"
+        };
+        A.CallTo(() => _fakeRepository.AddAsync(customer)).Throws(new Exception());
+        A.CallTo(() => _fakeUow.Repository<Customer>()).Returns(_fakeRepository);
+        
+        //Act
+        var result = await _fakeController.AddCustomer(customer);
+
+        //Assert
+        var objectResult = Assert.IsType<ObjectResult>(result);
+
+        Assert.Equal(500, objectResult.StatusCode);
+        Assert.Equal("Internal server error.", objectResult.Value);
+
+        A.CallTo(() => _fakeUow.Dispose()).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    private async Task GetAllCustomers_ReturnsOkResult_WithListOfCustomers()
+    {
+        //Arrange
+        var customers = A.CollectionOfDummy<Customer>(5);
+        
+        A.CallTo(() => _fakeRepository.GetAllAsync()).Returns(customers);
+        A.CallTo(() => _fakeUow.Repository<Customer>()).Returns(_fakeRepository);
+        
+        //Act
+        var result = await _fakeController.GetCustomers();
+
+        //Assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);  
+        var returnCustomers = Assert.IsAssignableFrom<IEnumerable<Customer>>(okResult.Value);  
+        Assert.Equal(customers.Count, returnCustomers.Count());
+
+        A.CallTo(() => _fakeRepository.GetAllAsync()).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task GetCustomers_WithNoCustomersInDb_ReturnsOkResult_WithEmptyList()
+    {
+        // Arrange
+        A.CallTo(() => _fakeRepository.GetAllAsync()).Returns(Task.FromResult((IEnumerable<Customer>)new List<Customer>()));
+        A.CallTo(() => _fakeUow.Repository<Customer>()).Returns(_fakeRepository);
+
+        // Act
+        var result = await _fakeController.GetCustomers();
+
+        // Assert
+        var okResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        var returnedCustomers = Assert.IsAssignableFrom<IEnumerable<Customer>>(okResult.Value);
+        Assert.Empty(returnedCustomers);
+        A.CallTo(() => _fakeRepository.GetAllAsync()).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task GetCustomerById_WithValidId_ReturnsOkResultWithACustomer()
+    {
+        // Arrange
+        var customer = A.Dummy<Customer>();
+        A.CallTo(() => _fakeRepository.GetByIdAsync(customer.Id)).Returns(Task.FromResult(customer));
+        A.CallTo(() => _fakeUow.Repository<Customer>()).Returns(_fakeRepository);
+
+        // Act
+        var result = await _fakeController.GetCustomerById(customer.Id);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var returnedCustomer = Assert.IsAssignableFrom<Customer>(okResult.Value);
+        Assert.Equal(customer, returnedCustomer);
+        A.CallTo(() => _fakeUow.Repository<Customer>().GetByIdAsync(customer.Id)).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task GetCustomerById_WithInvalidId_ReturnsNotFoundResult()
+    {
+        // Arrange
+        var customer = new Customer
+        {
+            Name = "Kurt Kenneth",
+            Email = "a@a.a"
+        };
+        await _controller.AddCustomer(customer);
+
+        // Act
+        var result = await _controller.GetCustomerById(999);
+
+        // Assert
+        Assert.IsType<NotFoundObjectResult>(result.Result);
+        
         await _context.Database.EnsureDeletedAsync();
     }
 

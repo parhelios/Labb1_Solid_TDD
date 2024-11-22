@@ -13,7 +13,6 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
     {
         var products = await uow.Repository<Product>().GetAllAsync();
-
         if (!products.Any())
             return NotFound(new List<Product>());
 
@@ -24,7 +23,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
         var product = await uow.Repository<Product>().GetByIdAsync(id);
-        if (product is null || product.Id != id)
+        if (product is null)
             return NotFound($"No product with id {id} was found.");
 
         return Ok(product);
@@ -63,19 +62,19 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
         if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0 || product.Amount < 0)
             return BadRequest("Product can't be null or contain whitespace.");
         
-        var productInDb = await uow.Repository<Product>().GetByIdAsync(product.Id);
-        if (productInDb is null)
-            return NotFound($"No product with id {id} was found.");
+        var productToUpdate = await uow.Repository<Product>().GetByIdAsync(product.Id);
+        if (productToUpdate is null)
+            return NotFound($"No product with id {product.Id} was found.");
 
         try
         {
-            productInDb.Name = product.Name;
-            productInDb.Price = product.Price;
-            productInDb.Amount = product.Amount;
+            productToUpdate.Name = product.Name;
+            productToUpdate.Price = product.Price;
+            productToUpdate.Amount = product.Amount;
             
-            await uow.Repository<Product>().UpdateAsync(productInDb);
+            await uow.Repository<Product>().UpdateAsync(productToUpdate);
             await uow.CommitAsync();
-            return Ok($"Product {id} updated successfully.");
+            return Ok($"Product {product.Id} updated successfully.");
         }
         catch (Exception ex)
         {

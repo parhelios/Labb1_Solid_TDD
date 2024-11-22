@@ -10,11 +10,17 @@ namespace WebShop.Controllers;
 [Route("api/[controller]")]
 public class CustomerController(IUnitOfWork uow) : ControllerBase
 {
+    private const string EMAILPATTERN = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+    private static bool EmailIsValid(string email) => Regex.IsMatch(email, EMAILPATTERN);
+    
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
     {
-        var customer = await uow.Repository<Customer>().GetAllAsync();
-        return Ok(customer);
+        var customers = await uow.Repository<Customer>().GetAllAsync();
+        if (!customers.Any())
+            return NotFound(new List<Customer>());
+        
+        return Ok(customers);
     }
 
     [HttpGet("{id}")]
@@ -23,7 +29,7 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
         var customer = await uow.Repository<Customer>().GetByIdAsync(id);
         if (customer is null)
             return NotFound($"No customer with id {id} was found.");
-
+        
         return Ok(customer);
     }
 
@@ -31,18 +37,16 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult> AddCustomer([FromBody] Customer customer)
     {
         if (!Validator.TryValidateObject(customer, new ValidationContext(customer), null, true))
-            return BadRequest("Invalid product data.");
+            return BadRequest("Invalid customer data.");
 
-        const string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-
-        if (!Regex.IsMatch(customer.Email, emailPattern))
+        if (!EmailIsValid(customer.Email))
             return BadRequest("Invalid email address");
 
         try
         {
             await uow.Repository<Customer>().AddAsync(customer);
             await uow.CommitAsync();
-            uow.NotifyCustomerAdded(customer);
+            // uow.NotifyCustomerAdded(customer); TODO: Reimplement
 
             return CreatedAtAction(nameof(AddCustomer), new { id = customer.Id }, customer);
         }
@@ -57,15 +61,29 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult> UpdateCustomer(int id, [FromBody] Customer customer)
     {
         if (!Validator.TryValidateObject(customer, new ValidationContext(customer), null, true))
-            return BadRequest("Invalid product data.");
+            return BadRequest("Invalid customer data.");
 
-        if (id != customer.Id)
-            return BadRequest("ID mismatch");
+        if (string.IsNullOrWhiteSpace(customer.Name) || !EmailIsValid(customer.Email))
+            return BadRequest("Invalid customer data format.");
+        
+        var customerToUpdate = await uow.Repository<Customer>().GetByIdAsync(customer.Id);
+        if (customerToUpdate is null)
+            return NotFound($"No customer with id {customer.Id} was found.");
 
-        await uow.Repository<Customer>().UpdateAsync(customer);
-        await uow.CommitAsync();
-
-        return Ok();
+        try
+        {
+            customerToUpdate.Name = customer.Name;
+            customerToUpdate.Email = customer.Email;
+            
+            await uow.Repository<Customer>().UpdateAsync(customerToUpdate);
+            await uow.CommitAsync();
+            return Ok($"Customer with id {customer.Id} was updated.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     [HttpDelete("{id}")]

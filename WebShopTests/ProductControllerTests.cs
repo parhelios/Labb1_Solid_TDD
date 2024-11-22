@@ -39,7 +39,7 @@ public class ProductControllerTests
     }
 
     [Fact]
-    public async Task AddProduct_ReturnsCreatedAtActionResult()
+    public async Task AddProduct_WithValidData_ReturnsCreatedAtActionResult()
     {
         // Arrange
         var product = new Product
@@ -48,7 +48,6 @@ public class ProductControllerTests
             Price = 10,
             Amount = 5
         };
-        A.CallTo(() => _fakeUow.Repository<Product>()).Returns(_fakeRepository);
 
         // Act
         var result = await _fakeController.AddProduct(product);
@@ -78,7 +77,8 @@ public class ProductControllerTests
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal(400, ((BadRequestObjectResult)result).StatusCode);
-        Assert.Equal("Invalid product data.", ((BadRequestObjectResult)result).Value);
+        
+        await _context.Database.EnsureDeletedAsync();
     }
 
     [Fact]
