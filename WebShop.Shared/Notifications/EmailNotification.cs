@@ -1,18 +1,18 @@
 ﻿using WebShop.Shared.Models;
 
-namespace WebShop.Shared.Notifications
+namespace WebShop.Shared.Notifications;
+
+// En konkret observatör som skickar e-postmeddelanden
+public class EmailNotification : INotificationObserver<Product>, INotificationObserver<Customer>
 {
-    // En konkret observatör som skickar e-postmeddelanden
-    public class EmailNotification : INotificationObserver
+    private readonly INotificationStrategy<Product> _productNotification;
+    private readonly INotificationStrategy<Customer> _customerNotification;
+    public EmailNotification(INotificationStrategy<Product> productNotification, INotificationStrategy<Customer> customerNotification)
     {
-        public void Update(Product product)
-        {
-            //TODO: Epostlogik
-            // Ska faktisk email-funktionalitet implementeras? 
-            
-            // Här skulle du implementera logik för att skicka ett e-postmeddelande
-            // För enkelhetens skull skriver vi ut till konsolen
-            Console.WriteLine($"Email Notification: New product added - {product.Name}");
-        }
+        _productNotification = productNotification;
+        _customerNotification = customerNotification;
     }
+
+    public void Update(Product product) => _productNotification.Notify(product);
+    public void Update(Customer entity) => _customerNotification.Notify(entity);
 }
