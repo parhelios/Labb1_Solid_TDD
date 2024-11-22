@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
@@ -29,8 +30,8 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> AddCustomer([FromBody] Customer customer)
     {
-        //if (!ModelState.IsValid)
-        //    return BadRequest(ModelState);
+        if (!Validator.TryValidateObject(customer, new ValidationContext(customer), null, true))
+            return BadRequest("Invalid product data.");
 
         const string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
 
@@ -46,8 +47,8 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateCustomer(int id, [FromBody] Customer customer)
     {
-        //if (!ModelState.IsValid)
-        //    return BadRequest(ModelState);
+        if (!Validator.TryValidateObject(customer, new ValidationContext(customer), null, true))
+            return BadRequest("Invalid product data.");
 
         if (id != customer.Id)
             return BadRequest("ID mismatch");

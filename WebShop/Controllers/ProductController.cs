@@ -45,7 +45,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
             await uow.CommitAsync();
             uow.NotifyProductAdded(product);
 
-            return Ok("Product added successfully.");
+            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
         catch (Exception ex)
         {

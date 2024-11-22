@@ -39,7 +39,7 @@ public class CustomerControllerTests
     }
 
     [Fact]
-    public async Task AddCustomer_WithValidData_ReturnsOkResult()
+    public async Task AddCustomer_WithValidData_ReturnsCreatedAtActionResult()
     {
         // Arrange
         var customer = new Customer

@@ -39,7 +39,7 @@ public class ProductControllerTests
     }
 
     [Fact]
-    public async Task AddProduct_ReturnsOkResult()
+    public async Task AddProduct_ReturnsCreatedAtActionResult()
     {
         // Arrange
         var product = new Product
@@ -48,13 +48,14 @@ public class ProductControllerTests
             Price = 10,
             Amount = 5
         };
+        A.CallTo(() => _fakeUow.Repository<Product>()).Returns(_fakeRepository);
 
         // Act
         var result = await _fakeController.AddProduct(product);
 
         // Assert
-        Assert.IsType<OkObjectResult>(result);
-        Assert.Equal("Product added successfully.", ((OkObjectResult)result).Value);
+        Assert.IsType<CreatedAtActionResult>(result);
+        Assert.Equal(product, ((CreatedAtActionResult)result).Value);
 
         A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
         A.CallTo(() => _fakeUow.NotifyProductAdded(product)).MustHaveHappenedOnceExactly();
