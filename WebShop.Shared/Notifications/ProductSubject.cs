@@ -3,7 +3,7 @@
 namespace WebShop.Shared.Notifications
 {
     // Subject som håller reda på observatörer och notifierar dem
-    public class ProductSubject
+    public class ProductSubject : ISubject<Product>
     {
         // Lista över registrerade observatörer
         //TODO: SE ÖVER

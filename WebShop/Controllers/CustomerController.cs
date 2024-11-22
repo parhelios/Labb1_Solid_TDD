@@ -38,10 +38,19 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
         if (!Regex.IsMatch(customer.Email, emailPattern))
             return BadRequest("Invalid email address");
 
-        await uow.Repository<Customer>().AddAsync(customer);
-        await uow.CommitAsync();
+        try
+        {
+            await uow.Repository<Customer>().AddAsync(customer);
+            await uow.CommitAsync();
+            uow.NotifyCustomerAdded(customer);
 
-        return CreatedAtAction(nameof(AddCustomer), new { id = customer.Id }, customer);
+            return CreatedAtAction(nameof(AddCustomer), new { id = customer.Id }, customer);
+        }
+        catch (Exception ex)
+        {
+            uow.Dispose();
+            return StatusCode(500, $"Internal server error.");
+        }
     }
 
     [HttpPut("{id}")]

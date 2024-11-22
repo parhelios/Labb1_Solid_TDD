@@ -30,7 +30,7 @@ public class CustomerControllerTests
         _context = new MyDbContext(options);
         _factory = new RepositoryFactory(_context);
 
-        _uow = new UnitOfWorkAndRepositoryFactory(_context, _factory);
+        _uow = new UnitOfWork(_context, _factory);
         _controller = new CustomerController(_uow);
 
         _fakeUow = A.Fake<IUnitOfWork>();
@@ -49,11 +49,11 @@ public class CustomerControllerTests
         };
 
         //Act
-        var result = await _controller.AddCustomer(customer);
+        var result = await _fakeController.AddCustomer(customer);
 
         //Assert
         Assert.IsType<CreatedAtActionResult>(result);
-        Assert.Contains(customer, _context.Customers);
+        Assert.Equal(customer, ((CreatedAtActionResult)result).Value);
         
         await _context.Database.EnsureDeletedAsync();
     }

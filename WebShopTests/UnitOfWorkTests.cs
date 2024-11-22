@@ -8,7 +8,7 @@ using WebShop.Shared.Notifications;
 
 namespace WebShopTests
 {
-    public class UnitOfWorkAndRepositoryFactoryTests
+    public class UnitOfWorkTests
     {
         private readonly IUnitOfWork _fakeUow = A.Fake<IUnitOfWork>();
         private readonly IRepository<Product> _fakeProductRepository = A.Fake<IRepository<Product>>();

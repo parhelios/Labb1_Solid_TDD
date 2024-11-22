@@ -5,10 +5,11 @@ using WebShop.Shared.Notifications;
 
 namespace WebShop.DataAccess.UnitOfWork;
 
-public class UnitOfWorkAndRepositoryFactory(MyDbContext context, IRepositoryFactory factory) : IUnitOfWork
+public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnitOfWork
 {
     private readonly Dictionary<Type, object> _repositories = new();
     private readonly ProductSubject _productSubject = new();
+    private readonly CustomerSubject _customerSubject;
 
     public IRepository<TEntity> Repository<TEntity>() where TEntity : class
     {
@@ -31,6 +32,12 @@ public class UnitOfWorkAndRepositoryFactory(MyDbContext context, IRepositoryFact
     {
         //TODO: Flytta?
         _productSubject.Notify(product);
+    }
+
+    public void NotifyCustomerAdded(Customer customer)
+    {
+        //TODO: Flytta?
+        _customerSubject.Notify(customer);
     }
 
     public async void Dispose()

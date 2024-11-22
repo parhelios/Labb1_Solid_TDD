@@ -10,5 +10,6 @@ namespace WebShop.DataAccess.UnitOfWork
         IRepository<TEntity> Repository<TEntity>() where TEntity : class;
         //TODO: Flytta?
         void NotifyProductAdded(Product product);
+        void NotifyCustomerAdded(Customer customer);
     }
 }

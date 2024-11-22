@@ -30,7 +30,7 @@ public class ProductControllerTests
         _context = new MyDbContext(options);
         _factory = new RepositoryFactory(_context);
 
-        _uow = new UnitOfWorkAndRepositoryFactory(_context, _factory);
+        _uow = new UnitOfWork(_context, _factory);
         _controller = new ProductController(_uow);
 
         _fakeUow = A.Fake<IUnitOfWork>();
