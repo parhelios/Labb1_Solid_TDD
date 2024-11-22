@@ -1,5 +1,6 @@
 ﻿using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Models;
+using WebShop.Shared.Models.Interfaces;
 
 namespace WebShop.DataAccess.UnitOfWork
 {
@@ -11,5 +12,6 @@ namespace WebShop.DataAccess.UnitOfWork
         //TODO: Flytta?
         void NotifyProductAdded(Product product);
         void NotifyCustomerAdded(Customer customer);
+        void Notify<TEntity>(TEntity entity);
     }
 }

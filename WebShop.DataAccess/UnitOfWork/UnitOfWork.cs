@@ -1,6 +1,7 @@
 ﻿using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Models;
+using WebShop.Shared.Models.Interfaces;
 using WebShop.Shared.Notifications;
 
 namespace WebShop.DataAccess.UnitOfWork;
@@ -8,8 +9,7 @@ namespace WebShop.DataAccess.UnitOfWork;
 public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnitOfWork
 {
     private readonly Dictionary<Type, object> _repositories = new();
-    private readonly ProductSubject _productSubject = new();
-    private readonly CustomerSubject _customerSubject;
+    private readonly ISubject<Type> _subject;
 
     public IRepository<TEntity> Repository<TEntity>() where TEntity : class
     {
@@ -31,13 +31,18 @@ public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnit
     public void NotifyProductAdded(Product product)
     {
         //TODO: Flytta?
-        _productSubject.Notify(product);
+        // _productSubject.Notify(product);
     }
 
     public void NotifyCustomerAdded(Customer customer)
     {
         //TODO: Flytta?
-        _customerSubject.Notify(customer);
+        // _customerSubject.Notify(customer);
+    }
+
+    public void Notify<TEntity>(TEntity entity)
+    {
+        // _subject.Notify(entity);
     }
 
     public async void Dispose()

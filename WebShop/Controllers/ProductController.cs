@@ -42,7 +42,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
         {
             await uow.Repository<Product>().AddAsync(product);
             await uow.CommitAsync();
-            uow.NotifyProductAdded(product);
+            uow.NotifyProductAdded(product); //TODO: Återimplementera
 
             return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
