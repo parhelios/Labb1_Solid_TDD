@@ -33,14 +33,11 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> AddProduct([FromBody] Product product)
     {
-        //if (!ModelState.IsValid)
-        //    return BadRequest(ModelState);
-
         if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
             return BadRequest("Invalid product data.");
 
         if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0)
-            return BadRequest("Invalid product data.");
+            return BadRequest("Product can't be null or contain whitespace.");
 
         try
         {
@@ -53,7 +50,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
         catch (Exception ex)
         {
             uow.Dispose();
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            return StatusCode(500, $"Internal server error.");
         }
     }
 
@@ -61,17 +58,22 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult> UpdateProduct(int id, [FromBody] Product product)
     {
         if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
-            return BadRequest();
-
-        //if (!ModelState.IsValid)
-        //    return BadRequest(ModelState);
+            return BadRequest("Invalid product data.");
 
         if (string.IsNullOrWhiteSpace(product.Name) || product.Price <= 0 || product.Amount < 0)
-            return BadRequest("Invalid product data.");
+            return BadRequest("Product can't be null or contain whitespace.");
+        
+        var productInDb = await uow.Repository<Product>().GetByIdAsync(product.Id);
+        if (productInDb is null)
+            return NotFound($"No product with id {id} was found.");
 
         try
         {
-            await uow.Repository<Product>().UpdateAsync(product);
+            productInDb.Name = product.Name;
+            productInDb.Price = product.Price;
+            productInDb.Amount = product.Amount;
+            
+            await uow.Repository<Product>().UpdateAsync(productInDb);
             await uow.CommitAsync();
             return Ok($"Product {id} updated successfully.");
         }
@@ -127,7 +129,6 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
     public async Task<ActionResult<IEnumerable<Product>>> SearchProducts([FromQuery] string name)
     {
         var products = await uow.Repository<Product>().FindAsync(p => p.Name.Contains(name));
-
         if (!products.Any())
             return NotFound(new List<Product>());
 
