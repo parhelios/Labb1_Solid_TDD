@@ -269,9 +269,8 @@ public class RepositoryTests
         
         await _repository.AddAsync(product);
         await _dbContext.SaveChangesAsync();
-        var addedProduct = await _dbContext.Products.FindAsync(1);
         
-        //Act: Try to delete a product that doesn't exist (ID = 11)
+        //Act: Try to delete a product that doesn't exist
         await _repository.DeleteAsync(11);
         await _dbContext.SaveChangesAsync();
         
