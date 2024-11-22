@@ -5,7 +5,7 @@ using WebShop.Shared.Notifications;
 
 namespace WebShop.DataAccess.UnitOfWork;
 
-public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnitOfWork
+public class UnitOfWorkAndRepositoryFactory(MyDbContext context, IRepositoryFactory factory) : IUnitOfWork
 {
     private readonly Dictionary<Type, object> _repositories = new();
     private readonly ProductSubject _productSubject = new();
