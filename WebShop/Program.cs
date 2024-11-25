@@ -20,9 +20,9 @@ builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 builder.Services.AddScoped<ISubjectFactory, SubjectFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(ISubject<>), typeof(Subject<>));
-builder.Services.AddScoped<ISubject<Product>, Subject<Product>>();
+// builder.Services.AddScoped<ISubject<Product>, Subject<Product>>();
 // builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); //TODO: Ev ta bort.
-// builder.Services.AddTransient<INotificationObserver<Product>, EmailNotification>(); //TODO: Ev ta bort
+builder.Services.AddTransient<INotificationObserver<Product>, EmailNotification>(); //TODO: Ev ta bort
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
