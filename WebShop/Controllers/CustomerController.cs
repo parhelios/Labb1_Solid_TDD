@@ -46,7 +46,6 @@ public class CustomerController(IUnitOfWork uow) : ControllerBase
         {
             await uow.Repository<Customer>().AddAsync(customer);
             await uow.CommitAsync();
-            // uow.NotifyCustomerAdded(customer); TODO: Reimplement
 
             return CreatedAtAction(nameof(AddCustomer), new { id = customer.Id }, customer);
         }

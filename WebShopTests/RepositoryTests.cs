@@ -167,6 +167,8 @@ public class RepositoryTests
     [ClassData(typeof(ProductTestData))]
     public async Task GetAllAsync_WithValidData_ShouldReturnAllProductsInDb(object input)
     {
+        await _dbContext.Database.EnsureDeletedAsync();
+
         //Arrange
         var products = input switch
         {

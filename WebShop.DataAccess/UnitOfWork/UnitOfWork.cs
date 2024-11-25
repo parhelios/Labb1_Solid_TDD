@@ -2,13 +2,15 @@
 using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
+using WebShop.Shared.Observer;
 
 namespace WebShop.DataAccess.UnitOfWork;
 
-public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnitOfWork
+public class UnitOfWork(MyDbContext context, IRepositoryFactory factory, ISubjectFactory subjectFactory) : IUnitOfWork
 {
     private readonly Dictionary<Type, object> _repositories = new();
-    private readonly ISubject<Type> _subject;
+    private readonly Dictionary<Type, object> _subjects = new();
+    private ISubject<IEntity> _subject; //TODO: Ta bort?
 
     public IRepository<TEntity> Repository<TEntity>() where TEntity : class
     {
@@ -21,27 +23,34 @@ public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnit
         _repositories[typeof(TEntity)] = repository;
         return repository;
     }
-
-    public async Task CommitAsync()
+    
+    public ISubject<TEntity> Subject<TEntity>() where TEntity : IEntity
     {
-        await context.SaveChangesAsync();
+        if (_subjects.TryGetValue(typeof(TEntity), out var existingSubject))
+        {
+            return (ISubject<TEntity>) existingSubject;
+        }
+
+        var subject = subjectFactory.CreateSubject<TEntity>();
+        _subjects[typeof(TEntity)] = subject;
+        return subject;
     }
 
     public void NotifyProductAdded(Product product)
     {
         //TODO: Flytta?
-        // _productSubject.Notify(product);
+        _subject.Notify(product);
     }
 
-    public void NotifyCustomerAdded(Customer customer)
+    public void NotifyAdded(IEntity entity)
     {
-        //TODO: Flytta?
-        // _customerSubject.Notify(customer);
+        _subject = Subject<IEntity>();
+        _subject.Notify(entity);
     }
 
-    public void Notify<TEntity>(TEntity entity)
+    public async Task CommitAsync()
     {
-        // _subject.Notify(entity);
+        await context.SaveChangesAsync();
     }
 
     public async void Dispose()

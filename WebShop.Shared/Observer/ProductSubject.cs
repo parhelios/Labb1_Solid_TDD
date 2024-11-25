@@ -3,10 +3,8 @@ using WebShop.Shared.Models;
 
 namespace WebShop.Shared.Observer
 {
-    // Subject som håller reda på observatörer och notifierar dem
     public class ProductSubject : ISubject<Product>
     {
-        //TODO: SE ÖVER
         private readonly List<INotificationObserver<Product>> _observers = [];
 
         public void Attach(INotificationObserver<Product> observer)

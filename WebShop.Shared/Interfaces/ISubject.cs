@@ -1,6 +1,6 @@
 ﻿namespace WebShop.Shared.Interfaces;
 
-public interface ISubject<TEntity> where TEntity : class
+public interface ISubject<TEntity> where TEntity : IEntity
 {
     void Attach(INotificationObserver<TEntity> observer);
     void Detach(INotificationObserver<TEntity> observer);

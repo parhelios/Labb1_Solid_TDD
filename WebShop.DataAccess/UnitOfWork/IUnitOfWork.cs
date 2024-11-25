@@ -1,4 +1,5 @@
 ﻿using WebShop.DataAccess.Repositories;
+using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
 
 namespace WebShop.DataAccess.UnitOfWork
@@ -8,9 +9,10 @@ namespace WebShop.DataAccess.UnitOfWork
     {
         Task CommitAsync();
         IRepository<TEntity> Repository<TEntity>() where TEntity : class;
+
+        ISubject<TEntity> Subject<TEntity>() where TEntity : IEntity;
         //TODO: Flytta?
         void NotifyProductAdded(Product product);
-        void NotifyCustomerAdded(Customer customer);
-        void Notify<TEntity>(TEntity entity);
+        void NotifyAdded(IEntity entity);
     }
 }

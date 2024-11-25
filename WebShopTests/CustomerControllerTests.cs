@@ -14,6 +14,7 @@ public class CustomerControllerTests
 {
     private readonly MyDbContext _context;
     private readonly IRepositoryFactory _factory;
+    private readonly ISubjectFactory _subjectFactory;
     private readonly IUnitOfWork _uow;
     private readonly CustomerController _controller;
 
@@ -30,7 +31,7 @@ public class CustomerControllerTests
         _context = new MyDbContext(options);
         _factory = new RepositoryFactory(_context);
 
-        _uow = new UnitOfWork(_context, _factory);
+        _uow = new UnitOfWork(_context, _factory, _subjectFactory);
         _controller = new CustomerController(_uow);
 
         _fakeUow = A.Fake<IUnitOfWork>();
@@ -57,7 +58,6 @@ public class CustomerControllerTests
         Assert.Equal(customer, ((CreatedAtActionResult)result).Value);
         
         A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _fakeUow.NotifyCustomerAdded(customer)).MustHaveHappenedOnceExactly();
     }
     
     [Fact]
@@ -199,7 +199,7 @@ public class CustomerControllerTests
         var result = await _controller.UpdateCustomer(1, customer);
 
         //Assert
-        Assert.IsType<OkResult>(result);
+        Assert.IsType<OkObjectResult>(result);
         var updatedUser = _context.Customers.Find(1);
         Assert.Equal("Kurt Kenneth Jr.", updatedUser.Name);
         

@@ -14,6 +14,7 @@ public class ProductControllerTests
 {
     private readonly MyDbContext _context;
     private readonly IRepositoryFactory _factory;
+    private readonly SubjectFactory _subjectFactory;
     private readonly IUnitOfWork _uow;
     private readonly ProductController _controller;
 
@@ -29,8 +30,9 @@ public class ProductControllerTests
 
         _context = new MyDbContext(options);
         _factory = new RepositoryFactory(_context);
+        _subjectFactory = new SubjectFactory();
 
-        _uow = new UnitOfWork(_context, _factory);
+        _uow = new UnitOfWork(_context, _factory, _subjectFactory);
         _controller = new ProductController(_uow);
 
         _fakeUow = A.Fake<IUnitOfWork>();
@@ -57,7 +59,7 @@ public class ProductControllerTests
         Assert.Equal(product, ((CreatedAtActionResult)result).Value);
 
         A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _fakeUow.NotifyProductAdded(product)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _fakeUow.NotifyAdded(product)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -277,6 +279,8 @@ public class ProductControllerTests
     [Fact]
     public async Task UpdateProduct_WithInvalidData_ReturnsBadRequest()
     {
+        await _context.Database.EnsureDeletedAsync();
+        
         // Arrange
         var product = new Product
         {
