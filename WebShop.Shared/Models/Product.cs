@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using WebShop.Shared.Models.Interfaces;
+using WebShop.Shared.Interfaces;
 
 namespace WebShop.Shared.Models;
 

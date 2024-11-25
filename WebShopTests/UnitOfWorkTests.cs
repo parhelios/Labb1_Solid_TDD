@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using WebShop.DataAccess;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
+using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
-using WebShop.Shared.Notifications;
+using WebShop.Shared.Observer;
 
 namespace WebShopTests
 {

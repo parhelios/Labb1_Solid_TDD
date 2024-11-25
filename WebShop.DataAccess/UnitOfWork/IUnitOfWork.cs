@@ -1,6 +1,5 @@
 ﻿using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Models;
-using WebShop.Shared.Models.Interfaces;
 
 namespace WebShop.DataAccess.UnitOfWork
 {

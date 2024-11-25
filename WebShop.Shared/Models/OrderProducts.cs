@@ -1,4 +1,4 @@
-﻿using WebShop.Shared.Models.Interfaces;
+﻿using WebShop.Shared.Interfaces;
 
 namespace WebShop.Shared.Models;
 
