@@ -1,8 +1,8 @@
 ﻿using WebShop.Shared.Models;
 
-namespace WebShop.Shared.Notifications;
+namespace WebShop.Shared.Interfaces;
 
 public interface INotificationObserver<TEntity> where TEntity : class
 {
-    void Update(TEntity entity); 
+    void Update(TEntity entity);
 }

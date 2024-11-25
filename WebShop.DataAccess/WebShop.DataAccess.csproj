@@ -18,8 +18,4 @@
       <ProjectReference Include="..\WebShop.Shared\WebShop.Shared.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Factory\" />
-    </ItemGroup>
-
 </Project>

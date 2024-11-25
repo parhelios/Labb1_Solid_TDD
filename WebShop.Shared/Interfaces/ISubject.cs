@@ -1,4 +1,4 @@
-﻿namespace WebShop.Shared.Notifications;
+﻿namespace WebShop.Shared.Interfaces;
 
 public interface ISubject<TEntity> where TEntity : class
 {
