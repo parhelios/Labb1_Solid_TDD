@@ -1,28 +1,25 @@
 ﻿using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
 
-namespace WebShop.Infrastructure.Observer
+namespace WebShop.Infrastructure.Observer;
+
+public class ProductSubject : ISubject<Product>
 {
-    public class ProductSubject : ISubject<Product>
+    private readonly List<INotificationObserver<Product>> _observers = [];
+
+    public void Attach(INotificationObserver<Product> observer)
     {
-        private readonly List<INotificationObserver<Product>> _observers = [];
+        _observers.Add(observer);
+    }
 
-        public void Attach(INotificationObserver<Product> observer)
-        {
-            _observers.Add(observer);
-        }
+    public void Detach(INotificationObserver<Product> observer)
+    {
+        _observers.Remove(observer);
+    }
 
-        public void Detach(INotificationObserver<Product> observer)
-        {
-            _observers.Remove(observer);
-        }
-
-        public void Notify(Product entity)
-        {
-            foreach (var observer in _observers)
-            {
-                observer.Update(entity);
-            }
-        }
+    public void Notify(Product entity)
+    {
+        foreach (var observer in _observers)
+            observer.Update(entity);
     }
 }

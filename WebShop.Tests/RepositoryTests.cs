@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebShop.Application.Interfaces;
-using WebShop.DataAccess;
 using WebShop.Domain.Entities;
 using WebShop.Infrastructure.DataAccess;
 using WebShop.Infrastructure.Interfaces;
 using WebShop.Infrastructure.Repositories;
-using WebShopTests.TestData;
+using WebShop.Tests.TestData;
 
-namespace WebShopTests;
+namespace WebShop.Tests;
 
 public class RepositoryTests
 {

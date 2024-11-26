@@ -6,6 +6,7 @@ using WebShop.Infrastructure.DataAccess;
 using WebShop.Infrastructure.Factory;
 using WebShop.Infrastructure.Interfaces;
 using WebShop.Infrastructure.Observer;
+using WebShop.Infrastructure.Observer.Notification;
 using WebShop.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +24,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // builder.Services.AddScoped(typeof(ISubject<>), typeof(Subject<>));
 builder.Services.AddScoped(typeof(ISubjectManager), typeof(SubjectManager));
 // builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); 
-builder.Services.AddTransient<INotificationObserver<Product>, EmailNotification>();
+builder.Services.AddTransient<INotificationObserver<Product>, EmailNotificationObserver>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

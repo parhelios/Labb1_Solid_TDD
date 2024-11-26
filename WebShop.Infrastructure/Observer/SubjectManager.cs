@@ -4,7 +4,6 @@ namespace WebShop.Infrastructure.Observer;
 
 public class SubjectManager(ISubjectFactory subjectFactory) : ISubjectManager
 {
-    //TODO: Byt namn
     private readonly Dictionary<Type, object> _subjects = new();
     
     public ISubject<TEntity> Subject<TEntity>() where TEntity : class

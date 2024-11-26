@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using WebShop.Domain.Entities;
 
-namespace WebShopTests.TestData;
+namespace WebShop.Tests.TestData;
 
 public class ProductAndIdTestData : IEnumerable<object[]>
 {

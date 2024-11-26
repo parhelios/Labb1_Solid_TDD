@@ -15,7 +15,7 @@ services:
   webshop:
     build:
       context: .
-      dockerfile: WebShop/Dockerfile
+      dockerfile: WebShop.Api/Dockerfile
     container_name: webshop
     ports:
       - "8080:8080"

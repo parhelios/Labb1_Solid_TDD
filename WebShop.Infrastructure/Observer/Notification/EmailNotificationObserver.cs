@@ -1,9 +1,9 @@
 ﻿using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
 
-namespace WebShop.Infrastructure.Observer;
+namespace WebShop.Infrastructure.Observer.Notification;
 
-public class EmailNotification : INotificationObserver<Product>
+public class EmailNotificationObserver : INotificationObserver<Product>
 {
     public void Update(Product entity)
     {
