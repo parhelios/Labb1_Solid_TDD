@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebShop.Controllers;
 using WebShop.DataAccess;
 using WebShop.Factory;
+using WebShop.Observer;
 using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
 using WebShop.UnitOfWork;
@@ -16,9 +17,11 @@ public class ProductControllerTests
     private readonly IRepositoryFactory _factory;
     private readonly SubjectFactory _subjectFactory;
     private readonly IUnitOfWork _uow;
+    private readonly SubjectManager _subjectManager;
     private readonly ProductController _controller;
 
     private readonly IUnitOfWork _fakeUow;
+    private readonly ISubjectManager _fakeSubjectManager;
     private readonly ProductController _fakeController;
     private readonly IRepository<Product> _fakeRepository;
 
@@ -32,11 +35,13 @@ public class ProductControllerTests
         _factory = new RepositoryFactory(_context);
         _subjectFactory = new SubjectFactory();
 
-        _uow = new UnitOfWork(_context, _factory, _subjectFactory);
-        _controller = new ProductController(_uow);
+        _uow = new UnitOfWork(_context, _factory);
+        _subjectManager = new SubjectManager(_subjectFactory);
+        _controller = new ProductController(_uow, _subjectManager);
 
         _fakeUow = A.Fake<IUnitOfWork>();
-        _fakeController = new ProductController(_fakeUow);
+        _fakeSubjectManager = A.Fake<ISubjectManager>();
+        _fakeController = new ProductController(_fakeUow, _fakeSubjectManager);
         _fakeRepository = A.Fake<IRepository<Product>>();
     }
 

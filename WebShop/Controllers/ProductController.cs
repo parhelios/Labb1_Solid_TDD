@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
+using WebShop.UnitOfWork;
 
 namespace WebShop.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController(IUnitOfWork uow) : ControllerBase
+public class ProductController(IUnitOfWork uow, ISubjectManager subjectManager) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
@@ -42,9 +43,7 @@ public class ProductController(IUnitOfWork uow) : ControllerBase
         {
             await uow.Repository<Product>().AddAsync(product);
             await uow.CommitAsync();
-            // uow.NotifyProductAdded(product); //TODO: Ta bort?
-            // uow.NotifyAdded(product); //TODO: Ta bort?
-            uow.Subject<Product>().Notify(product);
+            subjectManager.Subject<Product>().Notify(product);
             
             return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }

@@ -7,10 +7,5 @@ namespace WebShop.Shared.Interfaces
     {
         Task CommitAsync();
         IRepository<TEntity> Repository<TEntity>() where TEntity : class;
-
-        ISubject<TEntity> Subject<TEntity>() where TEntity : class;
-        //TODO: Flytta?
-        void NotifyProductAdded(Product product);
-        void NotifyAdded(IEntity entity);
     }
 }

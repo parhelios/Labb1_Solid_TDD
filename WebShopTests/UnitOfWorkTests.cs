@@ -8,6 +8,7 @@ namespace WebShopTests
     public class UnitOfWorkTests
     {
         private readonly IUnitOfWork _fakeUow = A.Fake<IUnitOfWork>();
+        private readonly ISubjectManager _fakeSubjectManager = A.Fake<ISubjectManager>();
         private readonly IRepository<Product> _fakeProductRepository = A.Fake<IRepository<Product>>();
         private readonly IRepository<Customer> _fakeCustomerRepository = A.Fake<IRepository<Customer>>();
         private readonly IRepository<Order> _fakeOrderRepository = A.Fake<IRepository<Order>>();
@@ -67,10 +68,10 @@ namespace WebShopTests
             productSubject.Attach(mockObserver);
         
             // Act
-            _fakeUow.Subject<Product>().Notify(dummyProduct);
+            _fakeSubjectManager.Subject<Product>().Notify(dummyProduct);
         
             // Assert
-            A.CallTo(()=> _fakeUow.Subject<Product>()).MustHaveHappenedOnceExactly();
+            A.CallTo(()=> _fakeSubjectManager.Subject<Product>()).MustHaveHappenedOnceExactly();
             // A.CallTo(()=> _fakeUow.Subject<Product>().Notify(dummyProduct)).MustHaveHappenedOnceExactly();
 
             return Task.CompletedTask;
