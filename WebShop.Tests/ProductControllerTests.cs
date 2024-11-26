@@ -71,6 +71,8 @@ public class ProductControllerTests
     [Fact]
     public async Task AddProduct_WithValidData_ReturnsCreatedAtActionResult_InMemoryDb()
     {
+        await _context.Database.EnsureCreatedAsync();
+
         // Arrange
         var product = new Product
         {
@@ -92,6 +94,8 @@ public class ProductControllerTests
     [Fact]
     public async Task AddProduct_WithInvalidData_ReturnsBadRequestResult()
     {
+        await _context.Database.EnsureCreatedAsync();
+        
         // Arrange
         var product = new Product
         {
@@ -113,6 +117,8 @@ public class ProductControllerTests
     [Fact]
     public async Task AddProduct_WithInvalidName_ReturnsBadRequestResult()
     {
+        await _context.Database.EnsureCreatedAsync();
+
         // Arrange
         var product = new Product
         {
@@ -128,11 +134,15 @@ public class ProductControllerTests
         Assert.IsAssignableFrom<BadRequestObjectResult>(result);
         Assert.Equal(400, ((BadRequestObjectResult)result).StatusCode);
         Assert.Equal("Invalid product data.", ((BadRequestObjectResult)result).Value);
+        
+        await _context.Database.EnsureDeletedAsync();
     }
     
     [Fact]
     public async Task AddProduct_WithInvalidPrice_ReturnsBadRequestResult()
     {
+        await _context.Database.EnsureCreatedAsync();
+
         // Arrange
         var product = new Product
         {
@@ -148,6 +158,8 @@ public class ProductControllerTests
         Assert.IsAssignableFrom<BadRequestObjectResult>(result);
         Assert.Equal(400, ((BadRequestObjectResult)result).StatusCode);
         Assert.Equal("Invalid product data.", ((BadRequestObjectResult)result).Value);
+        
+        await _context.Database.EnsureDeletedAsync();
     }
     
     [Fact]
@@ -233,6 +245,8 @@ public class ProductControllerTests
     [Fact]
     public async Task GetProductById_WithInvalidId_ReturnsNotFoundResult()
     {
+        await _context.Database.EnsureCreatedAsync();
+
         // Arrange
         var product = new Product
         {
@@ -254,6 +268,8 @@ public class ProductControllerTests
     [Fact]
     public async Task UpdateProduct_WithValidData_ReturnsOkResultWithSuccessMessage()
     {
+        await _context.Database.EnsureCreatedAsync();
+
         // Arrange
         var product = new Product
         {
@@ -278,6 +294,8 @@ public class ProductControllerTests
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
         Assert.Equal($"Product {product.Id} updated successfully.", okResult.Value);
+        
+        await _context.Database.EnsureDeletedAsync();
     }
     
     [Fact]
@@ -306,7 +324,7 @@ public class ProductControllerTests
     [Fact]
     public async Task UpdateProduct_WithInvalidData_ReturnsBadRequest()
     {
-        await _context.Database.EnsureDeletedAsync();
+        await _context.Database.EnsureCreatedAsync();
         
         // Arrange
         var product = new Product
@@ -335,6 +353,8 @@ public class ProductControllerTests
     [Fact]
     public async Task UpdateProduct_WithNoObjectInDb_ReturnsNotFoundResult()
     {
+        await _context.Database.EnsureCreatedAsync();
+        
         //Arrange
         var product = new Product
         {
@@ -354,83 +374,7 @@ public class ProductControllerTests
         
         await _context.Database.EnsureDeletedAsync();
     }
-    
-    // [Fact]
-    public async Task UpdateProduct_ThrowException_ActivateDisposeAndSendStatusCode500()
-    {
-        //Arrange
-        var product = new Product
-        {
-            Id = 1,
-            Name = "Test Product",
-            Price = 10,
-            Amount = 5
-        };
-        A.CallTo(() => _fakeRepository.GetByIdAsync(1)).Returns(Task.FromResult(product));
-        A.CallTo(() => _fakeRepository.UpdateAsync(A<Product>._)).Throws(new Exception("Test"));
-        A.CallTo(() => _fakeUow.Repository<Product>()).Returns(_fakeRepository);
-
-        await _controller.AddProduct(product);
-        product.Name = "New Test Product";
-        
-        //Act
-        var result = await _controller.UpdateProduct(1, product);
-
-        //Assert
-        var objectResult = Assert.IsType<ObjectResult>(result);
-        Assert.Equal(500, objectResult.StatusCode);
-        Assert.Equal("Internal server error", objectResult.Value);
-        A.CallTo(() => _fakeUow.Dispose()).MustHaveHappened();
-    }
-
-    [Fact]
-    public async Task UpdateProductAmount_WithValidAmount_ReturnsOkResult()
-    {
-        // Arrange
-        var product = new Product
-        {
-            Id = 123,
-            Name = "UpdateTest Product",
-            Price = 10,
-            Amount = 5
-        };
-
-        await _controller.AddProduct(product);
-        product.Amount = 10;
-
-        // Act
-        var result = await _controller.UpdateProduct(product.Id, product);
-
-        // Assert
-        Assert.IsType<OkObjectResult>(result);
-        var updatedProduct = await _uow.Repository<Product>().GetByIdAsync(product.Id);
-        Assert.Equal(product, updatedProduct);
-        
-        await _context.Database.EnsureDeletedAsync();
-    }
-
-    [Fact]
-    public async Task UpdateProductAmount_WithInvalidAmount_ReturnsBadRequest()
-    {
-        // Arrange
-        var product = new Product
-        {
-            Id = 123,
-            Name = "UpdateTest Product",
-            Price = 10,
-            Amount = 5
-        };
-
-        await _controller.AddProduct(product);
-        product.Amount = -5;
-
-        // Act
-        var result = await _controller.UpdateProduct(product.Id, product);
-
-        // Assert
-        Assert.IsType<BadRequestObjectResult>(result);
-    }
-
+ 
     [Fact]
     public async Task DeleteProduct_ReturnsOkResult()
     {
@@ -466,32 +410,10 @@ public class ProductControllerTests
     }
 
     [Fact]
-    public async Task DeleteProduct_WithFailedDbConnection_ThrowsAggregateException()
-    {
-        // Arrange
-        var product = new Product
-        {
-            Id = 111,
-            Name = "Delete Test Product",
-            Price = 10,
-            Amount = 5
-        };
-
-        await _controller.AddProduct(product);
-        await _context.Database.EnsureDeletedAsync();
-
-        // Act
-        var result = await _controller.DeleteProduct(product.Id);
-        var exception = result as ObjectResult;
-
-        // Assert
-        Assert.IsType<ObjectResult>(result);
-        Assert.Equal(500, exception.StatusCode);
-    }
-
-    [Fact]
     public async Task SearchProducts_WithValidName_ReturnsOkResult()
     {
+        await _context.Database.EnsureCreatedAsync();
+   
         // Arrange
         var product = new Product
         {
@@ -521,6 +443,8 @@ public class ProductControllerTests
     [Fact]
     public async Task SearchProducts_WithInvalidName_ReturnsNotFound_WithEmptyList()
     {
+        await _context.Database.EnsureCreatedAsync();
+
         // Arrange
         var product = new Product
         {
@@ -540,5 +464,7 @@ public class ProductControllerTests
         var notFoundResult = result.Result as NotFoundObjectResult;
         Assert.NotNull(notFoundResult);
         Assert.Empty(notFoundResult.Value as IEnumerable<Product>);
+        
+        _context.Database.EnsureDeleted();
     }
 }

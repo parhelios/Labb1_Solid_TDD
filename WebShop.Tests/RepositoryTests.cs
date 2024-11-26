@@ -25,6 +25,8 @@ public class RepositoryTests
     [Fact]
     public async Task AddAsync_WithValidData_ShouldAddEntityToDbSet()
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+   
         // Arrange
         var product = new Product
         {
@@ -50,6 +52,8 @@ public class RepositoryTests
     [ClassData(typeof(ProductTestData))]
     public async Task AddAsync_WithMultipleValidItems_ShouldAddEntityToDbSet(object input)
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+   
         var products = input switch
         {
             Product singleProduct => new List<Product> { singleProduct },
@@ -88,6 +92,8 @@ public class RepositoryTests
     [Fact]
     public async Task GetByIdAsync_WithValidData_ShouldReturnProductInDb()
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+
         //Arrange
         var product = new Product
         {
@@ -114,6 +120,8 @@ public class RepositoryTests
     [Fact]
     public async Task GetByIdAsync_WithInvalidId_ShouldReturnNull()
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+
         //Arrange
         var product = new Product
         {
@@ -143,6 +151,8 @@ public class RepositoryTests
     [InlineData(5782)]
     public async Task GetByIdAsync_WithMultipleInvalidId_ShouldReturnNull(int input)
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+
         //Arrange
         var product = new Product
         {
@@ -168,7 +178,7 @@ public class RepositoryTests
     [ClassData(typeof(ProductTestData))]
     public async Task GetAllAsync_WithValidData_ShouldReturnAllProductsInDb(object input)
     {
-        await _dbContext.Database.EnsureDeletedAsync();
+        await _dbContext.Database.EnsureCreatedAsync();
 
         //Arrange
         var products = input switch
@@ -204,10 +214,12 @@ public class RepositoryTests
     [Fact]
     public async Task UpdateAsync_WithValidData_ShouldUpdateEntityInDb()
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+
         //Arrange
         var product = new Product
         {
-            Id = 1,
+            Id = 555,
             Name = "Product Add Test",
             Price = 11,
             Amount = 5
@@ -221,7 +233,7 @@ public class RepositoryTests
         await _repository.UpdateAsync(product);
         await _dbContext.SaveChangesAsync();
 
-        var result = await _dbContext.Products.FindAsync(1);
+        var result = await _dbContext.Products.FindAsync(555);
         
         //Assert
         Assert.NotNull(result);
@@ -233,6 +245,8 @@ public class RepositoryTests
     [Fact]
     public async Task DeleteAsync_WithValidData_ShouldDeleteProductInDb()
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+
         //Arrange
         var product = new Product
         {
@@ -261,10 +275,12 @@ public class RepositoryTests
     [Fact]
     public async Task DeleteAsync_WithInvalidId_ShouldReturnNull()
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+
         //Arrange
         var product = new Product
         {
-            Id = 1,
+            Id = 99,
             Name = "Product Add Test",
             Price = 11,
             Amount = 5
@@ -274,11 +290,11 @@ public class RepositoryTests
         await _dbContext.SaveChangesAsync();
         
         //Act: Try to delete a product that doesn't exist
-        await _repository.DeleteAsync(11);
+        await _repository.DeleteAsync(678);
         await _dbContext.SaveChangesAsync();
         
         //Assert: Ensure the product with ID 1 is still present in the database
-        var result = await _dbContext.Products.FindAsync(1);
+        var result = await _dbContext.Products.FindAsync(99);
         Assert.NotNull(result);
         
         var allProducts = await _dbContext.Products.ToListAsync();
@@ -291,6 +307,8 @@ public class RepositoryTests
     [ClassData(typeof(ProductTestData))]
     public async Task FindAsync_WithValidId_ShouldReturnCorrectProduct(object input)
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+
         //Arrange
         var products = input switch
         {
@@ -312,8 +330,9 @@ public class RepositoryTests
         Assert.Equal(products[0].Id, result.Id); 
         Assert.Equal(products[0].Name, result.Name); 
         Assert.Equal(products[0].Price, result.Price); 
-        Assert.Equal(products[0].Amount, result.Amount); 
-        
+        Assert.Equal(products[0].Amount, result.Amount);
+
+        _dbContext.Products.RemoveRange(products);
         await _dbContext.Database.EnsureDeletedAsync();
     }
     
@@ -321,6 +340,8 @@ public class RepositoryTests
     [ClassData(typeof(ProductAndIdTestData))]
     public async Task FindAsync_WithNonExistentId_ShouldReturnNull(object input, int[] ids)
     {
+        await _dbContext.Database.EnsureCreatedAsync();
+
         //Arrange
         var products = input switch
         {
