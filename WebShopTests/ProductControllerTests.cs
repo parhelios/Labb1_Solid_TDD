@@ -5,8 +5,8 @@ using WebShop.Controllers;
 using WebShop.DataAccess;
 using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
-using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
+using WebShop.UnitOfWork;
 
 namespace WebShopTests;
 
