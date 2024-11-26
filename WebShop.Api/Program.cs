@@ -11,11 +11,6 @@ using WebShop.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var subjectManager = new SubjectManager(new SubjectFactory());
-var emailObserver = new EmailNotificationObserver();
-
-subjectManager.Subject<Product>().Attach(emailObserver);
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -26,10 +21,9 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 builder.Services.AddScoped<ISubjectFactory, SubjectFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-// builder.Services.AddScoped(typeof(ISubject<>), typeof(Subject<>));
 builder.Services.AddScoped(typeof(ISubjectManager), typeof(SubjectManager));
-// builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); 
 builder.Services.AddTransient<INotificationObserver<Product>, EmailNotificationObserver>();
+builder.Services.AddSingleton<ISubject<Product>, ProductSubject>(); //TODO: Remove?
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
