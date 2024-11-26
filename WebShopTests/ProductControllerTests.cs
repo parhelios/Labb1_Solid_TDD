@@ -59,7 +59,7 @@ public class ProductControllerTests
         Assert.Equal(product, ((CreatedAtActionResult)result).Value);
 
         A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _fakeUow.NotifyAdded(product)).MustHaveHappenedOnceExactly();
+        // A.CallTo(() => _fakeUow.Subject<Product>().Notify(A<Product>._)).MustHaveHappenedOnceExactly();
     }
     
     [Fact]

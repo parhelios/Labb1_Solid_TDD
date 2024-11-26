@@ -44,6 +44,7 @@ public class UnitOfWork(MyDbContext context, IRepositoryFactory factory, ISubjec
 
     public void NotifyAdded(IEntity entity)
     {
+        //TODO: Ta bort
         _subject = Subject<IEntity>();
         _subject.Notify(entity);
     }
