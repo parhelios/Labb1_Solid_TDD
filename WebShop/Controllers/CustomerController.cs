@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Application.Interfaces;
-using WebShop.Domain.Models;
+using WebShop.Domain.Entities;
 using WebShop.Infrastructure.Interfaces;
 
 namespace WebShop.Controllers;

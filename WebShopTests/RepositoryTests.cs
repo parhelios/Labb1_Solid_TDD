@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebShop.Application.Interfaces;
 using WebShop.DataAccess;
-using WebShop.Domain.Models;
+using WebShop.Domain.Entities;
 using WebShop.Infrastructure.DataAccess;
 using WebShop.Infrastructure.Interfaces;
 using WebShop.Infrastructure.Repositories;

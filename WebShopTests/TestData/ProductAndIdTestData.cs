@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using WebShop.Domain.Models;
+using WebShop.Domain.Entities;
 
 namespace WebShopTests.TestData;
 

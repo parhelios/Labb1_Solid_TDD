@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using WebShop.Application.Interfaces;
-using WebShop.Domain.Models;
+using WebShop.Domain.Entities;
 using WebShop.Infrastructure.Interfaces;
 
 namespace WebShop.Controllers;

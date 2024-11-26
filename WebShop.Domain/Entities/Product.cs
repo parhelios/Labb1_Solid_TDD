@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using WebShop.Domain.Interfaces;
 
-namespace WebShop.Domain.Models;
+namespace WebShop.Domain.Entities;
 
 public class Product : IProduct
 {

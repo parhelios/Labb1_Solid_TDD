@@ -1,5 +1,5 @@
 ﻿using WebShop.Application.Interfaces;
-using WebShop.Domain.Models;
+using WebShop.Domain.Entities;
 
 namespace WebShop.Infrastructure.Observer
 {

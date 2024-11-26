@@ -4,7 +4,7 @@ WORKDIR /src
 
 # Copy project files
 COPY ["WebShop/WebShop.csproj", "./WebShop/"]
-COPY ["WebShop.DataAccess/WebShop.DataAccess.csproj", "./WebShop.DataAccess/"]
+COPY ["WebShop.Infrastructure/WebShop.Infrastructure.csproj", "./WebShop.Infrastructure/"]
 COPY ["WebShop.Shared/WebShop.Shared.csproj", "./WebShop.Shared/"]
 COPY ["WebShopTests/WebShopTests.csproj", "./WebShopTests/"]
 
