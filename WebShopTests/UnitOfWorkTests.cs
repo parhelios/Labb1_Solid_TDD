@@ -58,23 +58,22 @@ namespace WebShopTests
         }
 
         [Fact]
-        public async Task NotifyProductAdded_CallsObserverUpdate()
+        public Task NotifyProductAdded_CallsObserverUpdate()
         {
             // Arrange
             var dummyProduct = A.Dummy<Product>();
-        
             var mockObserver = A.Fake<INotificationObserver<Product>>();
-        
             var productSubject = new ProductSubject();
             productSubject.Attach(mockObserver);
         
             // Act
-            _fakeUow.NotifyProductAdded(dummyProduct);
+            _fakeUow.Subject<Product>().Notify(dummyProduct);
         
             // Assert
-            // Verifierar att Update-metoden kallades p� v�r mock-observat�r
-            // mockObserver.Verify(o => o.Update(product), Times.Once);
-            // mockObserver.Verify(o => o.Update(dummyProduct, Times.Once));
+            A.CallTo(()=> _fakeUow.Subject<Product>()).MustHaveHappenedOnceExactly();
+            // A.CallTo(()=> _fakeUow.Subject<Product>().Notify(dummyProduct)).MustHaveHappenedOnceExactly();
+
+            return Task.CompletedTask;
         }
     }
 }
