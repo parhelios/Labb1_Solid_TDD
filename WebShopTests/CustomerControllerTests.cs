@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Controllers;
 using WebShop.DataAccess;
-using WebShop.Shared.Models;
 using Microsoft.EntityFrameworkCore;
-using WebShop.Factory;
-using WebShop.Shared.Interfaces;
-using WebShop.UnitOfWork;
+using WebShop.Application.Interfaces;
+using WebShop.Domain.Models;
+using WebShop.Infrastructure.DataAccess;
+using WebShop.Infrastructure.Factory;
+using WebShop.Infrastructure.Interfaces;
+using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebShopTests;
 

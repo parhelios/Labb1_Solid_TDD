@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
-using WebShop.Shared.Interfaces;
-using WebShop.Shared.Models;
+using WebShop.Application.Interfaces;
+using WebShop.Domain.Models;
+using WebShop.Infrastructure.Interfaces;
 
 namespace WebShop.Controllers;
 

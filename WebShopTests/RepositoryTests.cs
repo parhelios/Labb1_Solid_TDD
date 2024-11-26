@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebShop.Application.Interfaces;
 using WebShop.DataAccess;
-using WebShop.DataAccess.Repositories;
-using WebShop.Shared.Interfaces;
-using WebShop.Shared.Models;
+using WebShop.Domain.Models;
+using WebShop.Infrastructure.DataAccess;
+using WebShop.Infrastructure.Interfaces;
+using WebShop.Infrastructure.Repositories;
 using WebShopTests.TestData;
 
 namespace WebShopTests;

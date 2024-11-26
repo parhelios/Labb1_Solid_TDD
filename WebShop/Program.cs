@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using WebShop.Application.Interfaces;
 using WebShop.DataAccess;
-using WebShop.Factory;
-using WebShop.Observer;
-using WebShop.Shared.Interfaces;
-using WebShop.Shared.Models;
-using WebShop.UnitOfWork;
+using WebShop.Domain.Models;
+using WebShop.Infrastructure.DataAccess;
+using WebShop.Infrastructure.Factory;
+using WebShop.Infrastructure.Interfaces;
+using WebShop.Infrastructure.Observer;
+using WebShop.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+//TODO: Rensa upp överflödiga services
+
 // Registrera Unit of Work i DI-container
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 builder.Services.AddScoped<ISubjectFactory, SubjectFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped(typeof(ISubject<>), typeof(Subject<>));
-// builder.Services.AddScoped<ISubject<Product>, Subject<Product>>();
-// builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); //TODO: Ev ta bort.
-builder.Services.AddTransient<INotificationObserver<Product>, EmailNotification>(); //TODO: Ev ta bort
+// builder.Services.AddScoped(typeof(ISubject<>), typeof(Subject<>));
+builder.Services.AddScoped(typeof(ISubjectManager), typeof(SubjectManager));
+// builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); 
+builder.Services.AddTransient<INotificationObserver<Product>, EmailNotification>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

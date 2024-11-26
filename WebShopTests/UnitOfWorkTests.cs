@@ -1,7 +1,8 @@
 using FakeItEasy;
-using WebShop.Observer;
-using WebShop.Shared.Interfaces;
-using WebShop.Shared.Models;
+using WebShop.Application.Interfaces;
+using WebShop.Domain.Models;
+using WebShop.Infrastructure.Interfaces;
+using WebShop.Infrastructure.Observer;
 
 namespace WebShopTests
 {
