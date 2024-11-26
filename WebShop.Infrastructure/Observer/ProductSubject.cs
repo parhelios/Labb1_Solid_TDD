@@ -6,6 +6,17 @@ namespace WebShop.Infrastructure.Observer;
 public class ProductSubject : ISubject<Product>
 {
     private readonly List<INotificationObserver<Product>> _observers = [];
+    private static ProductSubject _instance;
+
+    public static ProductSubject Instance
+    {
+        get
+        {
+            if (_instance == null)
+                _instance = new ProductSubject();
+            return _instance;
+        }
+    } 
 
     public void Attach(INotificationObserver<Product> observer)
     {

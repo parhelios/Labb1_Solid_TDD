@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
 using WebShop.Infrastructure.Interfaces;
+using WebShop.Infrastructure.Observer;
 
 namespace WebShop.Controllers;
 
@@ -33,6 +34,9 @@ public class ProductController(IUnitOfWork uow, ISubjectManager subjectManager) 
     [HttpPost]
     public async Task<ActionResult> AddProduct([FromBody] Product product)
     {
+        var testData = new PopulateObserverData(subjectManager);
+        testData.Populate();
+
         if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
             return BadRequest("Invalid product data.");
 
@@ -43,7 +47,8 @@ public class ProductController(IUnitOfWork uow, ISubjectManager subjectManager) 
         {
             await uow.Repository<Product>().AddAsync(product);
             await uow.CommitAsync();
-            subjectManager.Subject<Product>().Notify(product);
+            var subjectTest = subjectManager.Subject<Product>();
+            subjectTest.Notify(product);
             
             return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
