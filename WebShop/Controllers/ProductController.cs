@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
-using WebShop.UnitOfWork;
 
 namespace WebShop.Controllers;
 

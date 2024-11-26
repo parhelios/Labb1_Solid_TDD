@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using WebShop.DataAccess;
-using WebShop.DataAccess.Repositories;
 using WebShop.Factory;
 using WebShop.Observer;
 using WebShop.Shared.Interfaces;

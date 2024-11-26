@@ -1,6 +1,4 @@
-﻿using WebShop.DataAccess.Repositories;
-
-namespace WebShop.Factory;
+﻿namespace WebShop.Shared.Interfaces;
 
 public interface IRepositoryFactory
 {

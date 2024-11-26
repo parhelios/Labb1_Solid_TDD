@@ -1,6 +1,4 @@
-﻿using WebShop.Shared.Models;
-
-namespace WebShop.Shared.Interfaces;
+﻿namespace WebShop.Shared.Interfaces;
 
 public interface INotificationObserver<TEntity> where TEntity : class
 {

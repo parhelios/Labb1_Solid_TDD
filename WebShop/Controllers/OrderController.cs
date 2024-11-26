@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
-using WebShop.UnitOfWork;
 
 namespace WebShop.Controllers;
 

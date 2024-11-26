@@ -1,6 +1,4 @@
-﻿using WebShop.Shared.Interfaces;
-
-namespace WebShop.Factory;
+﻿namespace WebShop.Shared.Interfaces;
 
 public interface ISubjectFactory
 {

@@ -1,6 +1,6 @@
 ﻿using WebShop.DataAccess;
 using WebShop.DataAccess.Repositories;
-using WebShop.Shared.Models;
+using WebShop.Shared.Interfaces;
 
 namespace WebShop.Factory;
 
@@ -8,9 +8,6 @@ public class RepositoryFactory(MyDbContext context) : IRepositoryFactory
 {
     public IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class
     {
-        if (typeof(TEntity) == typeof(Product))
-            return (IRepository<TEntity>) new ProductRepository(context);
-
         return new Repository<TEntity>(context);
     }
 }

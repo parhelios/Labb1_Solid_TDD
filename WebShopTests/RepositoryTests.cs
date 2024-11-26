@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebShop.DataAccess;
 using WebShop.DataAccess.Repositories;
+using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
 using WebShopTests.TestData;
 

@@ -1,6 +1,4 @@
 ﻿using WebShop.DataAccess;
-using WebShop.DataAccess.Repositories;
-using WebShop.Factory;
 using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
 
