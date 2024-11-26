@@ -3,20 +3,20 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy project files
-COPY ["WebShop/WebShop.csproj", "./WebShop/"]
+COPY ["WebShop.Api/WebShop.Api.csproj", "./WebShop.Api/"]
 COPY ["WebShop.Infrastructure/WebShop.Infrastructure.csproj", "./WebShop.Infrastructure/"]
 COPY ["WebShop.Domain/WebShop.Domain.csproj", "./WebShop.Domain/"]
 COPY ["WebShop.Application/WebShop.Application.csproj", "./WebShop.Application/"]
 COPY ["WebShop.Tests/WebShop.Tests.csproj", "./WebShop.Tests/"]
 
 # Restore dependencies
-RUN dotnet restore "WebShop/WebShop.csproj"
+RUN dotnet restore "WebShop.Api/WebShop.csproj"
 
 # Copy the full solution
 COPY . .
 
 # Build all projects
-RUN dotnet build "WebShop/WebShop.csproj" -c Release
+RUN dotnet build "WebShop.Api/WebShop.csproj" -c Release
 
 # Stage 2: Run tests
 FROM build AS test
@@ -28,7 +28,7 @@ RUN dotnet test "WebShop.Tests.csproj" --no-build --logger:trx --results-directo
 # Stage 3: Publish WebShop (only proceeds if tests pass)
 FROM build AS publish
 WORKDIR /src/WebShop
-RUN dotnet publish "WebShop.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "WebShop.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Stage 4: Final runtime image for WebShop
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final

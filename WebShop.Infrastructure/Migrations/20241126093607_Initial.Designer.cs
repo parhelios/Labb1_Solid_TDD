@@ -25,7 +25,7 @@ namespace WebShop.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebShop.Domain.Models.Customer", b =>
+            modelBuilder.Entity("WebShop.Api.Domain.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +48,7 @@ namespace WebShop.DataAccess.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("WebShop.Domain.Models.Order", b =>
+            modelBuilder.Entity("WebShop.Api.Domain.Models.Order", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -58,7 +58,7 @@ namespace WebShop.DataAccess.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("WebShop.Domain.Models.OrderProducts", b =>
+            modelBuilder.Entity("WebShop.Api.Domain.Models.OrderProducts", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -73,7 +73,7 @@ namespace WebShop.DataAccess.Migrations
                     b.ToTable("OrderProducts");
                 });
 
-            modelBuilder.Entity("WebShop.Domain.Models.Product", b =>
+            modelBuilder.Entity("WebShop.Api.Domain.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,9 +97,9 @@ namespace WebShop.DataAccess.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("WebShop.Domain.Models.Order", b =>
+            modelBuilder.Entity("WebShop.Api.Domain.Models.Order", b =>
                 {
-                    b.HasOne("WebShop.Domain.Models.Customer", "Customer")
+                    b.HasOne("WebShop.Api.Domain.Models.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -108,15 +108,15 @@ namespace WebShop.DataAccess.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("WebShop.Domain.Models.OrderProducts", b =>
+            modelBuilder.Entity("WebShop.Api.Domain.Models.OrderProducts", b =>
                 {
-                    b.HasOne("WebShop.Domain.Models.Order", "Order")
+                    b.HasOne("WebShop.Api.Domain.Models.Order", "Order")
                         .WithMany("Products")
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebShop.Domain.Models.Product", "Product")
+                    b.HasOne("WebShop.Api.Domain.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -127,12 +127,12 @@ namespace WebShop.DataAccess.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WebShop.Domain.Models.Customer", b =>
+            modelBuilder.Entity("WebShop.Api.Domain.Models.Customer", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("WebShop.Domain.Models.Order", b =>
+            modelBuilder.Entity("WebShop.Api.Domain.Models.Order", b =>
                 {
                     b.Navigation("Products");
                 });
