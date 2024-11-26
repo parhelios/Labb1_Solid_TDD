@@ -1,10 +1,10 @@
-﻿using WebShop.DataAccess.Factory;
+﻿using WebShop.DataAccess;
+using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
-using WebShop.Shared.Observer;
 
-namespace WebShop.DataAccess.UnitOfWork;
+namespace WebShop.UnitOfWork;
 
 public class UnitOfWork(MyDbContext context, IRepositoryFactory factory, ISubjectFactory subjectFactory) : IUnitOfWork
 {
