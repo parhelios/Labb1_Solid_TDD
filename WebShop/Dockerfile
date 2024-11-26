@@ -5,8 +5,9 @@ WORKDIR /src
 # Copy project files
 COPY ["WebShop/WebShop.csproj", "./WebShop/"]
 COPY ["WebShop.Infrastructure/WebShop.Infrastructure.csproj", "./WebShop.Infrastructure/"]
-COPY ["WebShop.Shared/WebShop.Shared.csproj", "./WebShop.Shared/"]
-COPY ["WebShopTests/WebShopTests.csproj", "./WebShopTests/"]
+COPY ["WebShop.Domain/WebShop.Domain.csproj", "./WebShop.Domain/"]
+COPY ["WebShop.Application/WebShop.Application.csproj", "./WebShop.Application/"]
+COPY ["WebShop.Tests/WebShop.Tests.csproj", "./WebShop.Tests/"]
 
 # Restore dependencies
 RUN dotnet restore "WebShop/WebShop.csproj"
@@ -22,7 +23,7 @@ FROM build AS test
 WORKDIR /src/WebShopTests
 
 # Run tests and ensure they pass
-RUN dotnet test "WebShopTests.csproj" --no-build --logger:trx --results-directory /src/TestResults
+RUN dotnet test "WebShop.Tests.csproj" --no-build --logger:trx --results-directory /src/TestResults
 
 # Stage 3: Publish WebShop (only proceeds if tests pass)
 FROM build AS publish
