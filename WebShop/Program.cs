@@ -7,9 +7,7 @@ using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
 using WebShop.Shared.Observer;
 
-
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add services to the container.
 
