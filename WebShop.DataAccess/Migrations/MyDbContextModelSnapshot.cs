@@ -41,7 +41,7 @@ namespace WebShop.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("WebShop.Shared.Models.Order", b =>
@@ -51,7 +51,7 @@ namespace WebShop.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("WebShop.Shared.Models.OrderProducts", b =>
@@ -66,7 +66,7 @@ namespace WebShop.DataAccess.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProducts", (string)null);
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("WebShop.Shared.Models.Product", b =>
@@ -90,7 +90,7 @@ namespace WebShop.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("WebShop.Shared.Models.Order", b =>

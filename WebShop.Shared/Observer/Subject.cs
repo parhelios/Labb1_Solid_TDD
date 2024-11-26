@@ -2,7 +2,7 @@
 
 namespace WebShop.Shared.Observer;
 
-public class Subject<TEntity> : ISubject<TEntity> where TEntity : IEntity
+public class Subject<TEntity> : ISubject<TEntity> where TEntity : class
 {
     private readonly List<INotificationObserver<TEntity>> _observers = [];
 

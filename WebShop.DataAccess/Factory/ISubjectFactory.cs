@@ -4,5 +4,5 @@ namespace WebShop.DataAccess.Factory;
 
 public interface ISubjectFactory
 {
-    ISubject<TEntity> CreateSubject<TEntity>() where TEntity : IEntity;
+    ISubject<TEntity> CreateSubject<TEntity>() where TEntity : class;
 }

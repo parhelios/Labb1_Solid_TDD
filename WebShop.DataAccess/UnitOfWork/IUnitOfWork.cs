@@ -10,7 +10,7 @@ namespace WebShop.DataAccess.UnitOfWork
         Task CommitAsync();
         IRepository<TEntity> Repository<TEntity>() where TEntity : class;
 
-        ISubject<TEntity> Subject<TEntity>() where TEntity : IEntity;
+        ISubject<TEntity> Subject<TEntity>() where TEntity : class;
         //TODO: Flytta?
         void NotifyProductAdded(Product product);
         void NotifyAdded(IEntity entity);

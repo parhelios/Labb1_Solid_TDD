@@ -61,6 +61,27 @@ public class ProductControllerTests
         A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
         A.CallTo(() => _fakeUow.NotifyAdded(product)).MustHaveHappenedOnceExactly();
     }
+    
+    [Fact]
+    public async Task AddProduct_WithValidData_ReturnsCreatedAtActionResult_InMemoryDb()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Name = "Test Product",
+            Price = 10,
+            Amount = 5
+        };
+        
+        // Act
+        var result = await _controller.AddProduct(product);
+
+        // Assert
+        Assert.IsType<CreatedAtActionResult>(result);
+        Assert.Equal(product, ((CreatedAtActionResult)result).Value);
+        
+        await _context.Database.EnsureDeletedAsync();
+    }
 
     [Fact]
     public async Task AddProduct_WithInvalidData_ReturnsBadRequestResult()

@@ -24,7 +24,7 @@ public class UnitOfWork(MyDbContext context, IRepositoryFactory factory, ISubjec
         return repository;
     }
     
-    public ISubject<TEntity> Subject<TEntity>() where TEntity : IEntity
+    public ISubject<TEntity> Subject<TEntity>() where TEntity : class
     {
         if (_subjects.TryGetValue(typeof(TEntity), out var existingSubject))
         {
