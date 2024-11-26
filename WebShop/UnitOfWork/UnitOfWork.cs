@@ -1,6 +1,6 @@
 ﻿using WebShop.DataAccess;
-using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
+using WebShop.Factory;
 using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
 
@@ -15,9 +15,7 @@ public class UnitOfWork(MyDbContext context, IRepositoryFactory factory, ISubjec
     public IRepository<TEntity> Repository<TEntity>() where TEntity : class
     {
         if (_repositories.TryGetValue(typeof(TEntity), out var existingRepository))
-        {
             return (IRepository<TEntity>) existingRepository;
-        }
 
         var repository = factory.CreateRepository<TEntity>();
         _repositories[typeof(TEntity)] = repository;
@@ -27,9 +25,7 @@ public class UnitOfWork(MyDbContext context, IRepositoryFactory factory, ISubjec
     public ISubject<TEntity> Subject<TEntity>() where TEntity : class
     {
         if (_subjects.TryGetValue(typeof(TEntity), out var existingSubject))
-        {
             return (ISubject<TEntity>) existingSubject;
-        }
 
         var subject = subjectFactory.CreateSubject<TEntity>();
         _subjects[typeof(TEntity)] = subject;

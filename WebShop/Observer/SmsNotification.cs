@@ -1,7 +1,7 @@
 ﻿using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
 
-namespace WebShop.Shared.Observer;
+namespace WebShop.Observer;
 
 public class SmsNotification : INotificationObserver<Product>
 {

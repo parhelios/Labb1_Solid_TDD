@@ -1,7 +1,8 @@
-﻿using WebShop.DataAccess.Repositories;
+﻿using WebShop.DataAccess;
+using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Models;
 
-namespace WebShop.DataAccess.Factory;
+namespace WebShop.Factory;
 
 public class RepositoryFactory(MyDbContext context) : IRepositoryFactory
 {

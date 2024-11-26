@@ -1,6 +1,6 @@
 ﻿using WebShop.Shared.Interfaces;
 
-namespace WebShop.Shared.Observer;
+namespace WebShop.Observer;
 
 public class Subject<TEntity> : ISubject<TEntity> where TEntity : class
 {

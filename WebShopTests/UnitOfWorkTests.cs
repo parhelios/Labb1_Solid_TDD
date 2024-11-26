@@ -2,9 +2,9 @@ using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
 using WebShop.DataAccess;
 using WebShop.DataAccess.Repositories;
+using WebShop.Observer;
 using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
-using WebShop.Shared.Observer;
 using WebShop.UnitOfWork;
 
 namespace WebShopTests

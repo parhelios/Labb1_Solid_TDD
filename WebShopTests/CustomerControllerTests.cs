@@ -1,11 +1,11 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Controllers;
-using WebShop.DataAccess.Factory;
 using WebShop.DataAccess;
 using WebShop.DataAccess.Repositories;
 using WebShop.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using WebShop.Factory;
 using WebShop.UnitOfWork;
 
 namespace WebShopTests;

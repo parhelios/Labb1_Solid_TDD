@@ -1,8 +1,8 @@
-﻿using WebShop.Shared.Interfaces;
+﻿using WebShop.Observer;
+using WebShop.Shared.Interfaces;
 using WebShop.Shared.Models;
-using WebShop.Shared.Observer;
 
-namespace WebShop.DataAccess.Factory;
+namespace WebShop.Factory;
 
 public class SubjectFactory : ISubjectFactory
 {

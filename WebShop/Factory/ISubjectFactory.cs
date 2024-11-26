@@ -1,6 +1,6 @@
 ﻿using WebShop.Shared.Interfaces;
 
-namespace WebShop.DataAccess.Factory;
+namespace WebShop.Factory;
 
 public interface ISubjectFactory
 {
