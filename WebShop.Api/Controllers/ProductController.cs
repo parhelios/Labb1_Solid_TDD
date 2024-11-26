@@ -2,9 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
-using WebShop.Infrastructure.Factory;
 using WebShop.Infrastructure.Interfaces;
-using WebShop.Infrastructure.Observer.Notification;
 using WebShop.Infrastructure.Observer;
 
 namespace WebShop.Controllers;
@@ -36,14 +34,8 @@ public class ProductController(IUnitOfWork uow, ISubjectManager subjectManager) 
     [HttpPost]
     public async Task<ActionResult> AddProduct([FromBody] Product product)
     {
-        //TODO: Flytta på
-        var emailObserver = new EmailNotificationObserver("Test Testies", "test@test.se");
-
-        var subject = subjectManager.Subject<Product>();
-        subject.Attach(emailObserver);
-
-
-
+        var testData = new PopulateObserverData(subjectManager);
+        testData.Populate();
 
         if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
             return BadRequest("Invalid product data.");
