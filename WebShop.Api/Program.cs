@@ -11,6 +11,11 @@ using WebShop.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var subjectManager = new SubjectManager(new SubjectFactory());
+var emailObserver = new EmailNotificationObserver();
+
+subjectManager.Subject<Product>().Attach(emailObserver);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
