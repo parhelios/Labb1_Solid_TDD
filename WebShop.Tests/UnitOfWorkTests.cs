@@ -1,15 +1,13 @@
 using FakeItEasy;
-using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
 using WebShop.Infrastructure.Interfaces;
-using WebShop.Infrastructure.Observer;
+using WebShop.Tests.TestData;
 
 namespace WebShop.Tests;
 
 public class UnitOfWorkTests
 {
     private readonly IUnitOfWork _fakeUow = A.Fake<IUnitOfWork>();
-    private readonly ISubjectManager _fakeSubjectManager = A.Fake<ISubjectManager>();
     private readonly IRepository<Product> _fakeProductRepository = A.Fake<IRepository<Product>>();
     private readonly IRepository<Customer> _fakeCustomerRepository = A.Fake<IRepository<Customer>>();
     private readonly IRepository<Order> _fakeOrderRepository = A.Fake<IRepository<Order>>();
@@ -43,7 +41,6 @@ public class UnitOfWorkTests
         A.CallTo(() => _fakeUow.Repository<Customer>().AddAsync(customer)).MustHaveHappenedOnceExactly();
     }
 
-
     [Fact]
     public async Task CallsUnitOfWork_ReturnsRepository_OfTypeOrder()
     {
@@ -58,23 +55,34 @@ public class UnitOfWorkTests
         // Assert
         A.CallTo(() => _fakeUow.Repository<Order>().AddAsync(order)).MustHaveHappenedOnceExactly();
     }
-
+  
     [Fact]
-    public Task NotifyProductAdded_CallsObserverUpdate()
+    public async Task CallsUnitOfWork_CommitChangeIsCalled()
     {
         // Arrange
+        var productService = new MockProductService(_fakeUow);
         var dummyProduct = A.Dummy<Product>();
-        var mockObserver = A.Fake<INotificationObserver<Product>>();
-        var productSubject = new ProductSubject();
-        productSubject.Attach(mockObserver);
-        
+
         // Act
-        _fakeSubjectManager.Subject<Product>().Notify(dummyProduct);
+        await productService.AddProductAsync(dummyProduct);
         
         // Assert
-        A.CallTo(()=> _fakeSubjectManager.Subject<Product>()).MustHaveHappenedOnceExactly();
-        // A.CallTo(()=> _fakeUow.Subject<Product>().Notify(dummyProduct)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
 
-        return Task.CompletedTask;
     }
+    
+    [Fact]
+    public async Task AddProductAsync_CallsDisposeOnUnitOfWork()
+    {
+        // Arrange
+        var productService = new MockProductService(_fakeUow);
+        var dummyProduct = A.Dummy<Product>();
+
+        // Act
+        await productService.AddProductAsync(dummyProduct);
+
+        // Assert
+        A.CallTo(() => _fakeUow.Dispose()).MustHaveHappenedOnceExactly();
+    }
+
 }
