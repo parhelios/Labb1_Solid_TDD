@@ -10,6 +10,6 @@ public class EmailNotificationObserver : INotificationObserver<Product>
 
     public void Update(Product entity)
     {
-        Console.WriteLine($" To {Name}: {Email}.\nEmail Notification: New product added - {entity.Name}.");
+        Console.WriteLine($"To {Name}: {Email}.\nEmail Notification: New product added - {entity.Name}.");
     }
 }
