@@ -6,7 +6,7 @@ using WebShop.Domain.Interfaces;
 
 namespace WebShop.Tests;
 
-public class ObserverTests
+public class ProductObserverTests
 {
     private readonly ISubject<Product> _subject = new ProductSubject();
     private readonly INotificationObserver<Product> _observer = A.Fake<INotificationObserver<Product>>();
