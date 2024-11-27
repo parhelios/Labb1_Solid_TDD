@@ -1,7 +1,7 @@
 ﻿using WebShop.Infrastructure.DataAccess;
 using WebShop.Infrastructure.Interfaces;
 
-namespace WebShop.Infrastructure.UnitOfWork;
+namespace WebShop.Infrastructure;
 
 public class UnitOfWork(MyDbContext context, IRepositoryFactory factory) : IUnitOfWork
 {

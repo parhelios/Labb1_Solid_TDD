@@ -1,8 +1,7 @@
 ﻿using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
-using WebShop.Infrastructure.Observer.Notification;
 
-namespace WebShop.Infrastructure.Observer.ObserverPatternData;
+namespace WebShop.Infrastructure.Observers.ObserverPatternData;
 
 public class PopulateObserverData
 {

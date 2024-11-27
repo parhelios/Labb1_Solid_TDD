@@ -3,8 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
 using WebShop.Infrastructure.Interfaces;
-using WebShop.Infrastructure.Observer;
-using WebShop.Infrastructure.Observer.ObserverPatternData;
+using WebShop.Infrastructure.Observers.ObserverPatternData;
 
 namespace WebShop.Controllers;
 
@@ -109,27 +108,6 @@ public class ProductController(IUnitOfWork uow, ISubjectManager subjectManager) 
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
-
-    //[HttpPatch("{id}/amount")]
-    //public async Task<IActionResult> UpdateProductAmount(int id, int amount)
-    //{
-    //    var product = await uow.Repository<Product>().GetByIdAsync(id);
-    //    if (product is null)
-    //        return NotFound();
-
-    //    try
-    //    {
-    //        var repo = uow.Repository<Product>() as IProductRepository;            
-    //        repo.UpdateProductAmount(id, amount);
-    //        await uow.CommitAsync();
-
-    //        return Ok($"Product amount updated to {amount}.");
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return StatusCode(500, $"Internal server error: {ex.Message}");
-    //    }
-    //}
 
     [HttpGet("search")]
     public async Task<ActionResult<IEnumerable<Product>>> SearchProducts([FromQuery] string name)

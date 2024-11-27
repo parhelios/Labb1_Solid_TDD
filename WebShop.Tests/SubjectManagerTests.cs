@@ -1,7 +1,8 @@
 ﻿using FakeItEasy;
 using WebShop.Application.Interfaces;
+using WebShop.Application.Subjects;
 using WebShop.Domain.Entities;
-using WebShop.Infrastructure.Observer;
+using WebShop.Domain.Interfaces;
 
 namespace WebShop.Tests;
 

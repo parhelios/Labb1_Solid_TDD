@@ -1,4 +1,6 @@
-﻿namespace WebShop.Application.Interfaces;
+﻿using WebShop.Domain.Interfaces;
+
+namespace WebShop.Application.Interfaces;
 
 public interface ISubject<TEntity> where TEntity : class
 {

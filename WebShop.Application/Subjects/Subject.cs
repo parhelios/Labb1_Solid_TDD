@@ -1,6 +1,7 @@
 ﻿using WebShop.Application.Interfaces;
+using WebShop.Domain.Interfaces;
 
-namespace WebShop.Infrastructure.Observer;
+namespace WebShop.Application.Subjects;
 
 public class Subject<TEntity> : ISubject<TEntity> where TEntity : class
 {

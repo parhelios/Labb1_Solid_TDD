@@ -1,4 +1,4 @@
-﻿namespace WebShop.Application.Interfaces;
+﻿namespace WebShop.Domain.Interfaces;
 
 public interface INotificationObserver<TEntity> where TEntity : class
 {

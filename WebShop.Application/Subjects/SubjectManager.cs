@@ -1,6 +1,6 @@
 ﻿using WebShop.Application.Interfaces;
 
-namespace WebShop.Infrastructure.Observer;
+namespace WebShop.Application.Subjects;
 
 public class SubjectManager(ISubjectFactory subjectFactory) : ISubjectManager
 {

@@ -1,7 +1,7 @@
-﻿using WebShop.Application.Interfaces;
-using WebShop.Domain.Entities;
+﻿using WebShop.Domain.Entities;
+using WebShop.Domain.Interfaces;
 
-namespace WebShop.Infrastructure.Observer.Notification;
+namespace WebShop.Infrastructure.Observers;
 
 public class EmailNotificationObserver : INotificationObserver<Product>
 {

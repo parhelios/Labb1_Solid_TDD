@@ -1,7 +1,8 @@
 ﻿using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
+using WebShop.Domain.Interfaces;
 
-namespace WebShop.Infrastructure.Observer;
+namespace WebShop.Application.Subjects;
 
 public class ProductSubject : ISubject<Product>
 {
