@@ -2,9 +2,6 @@
 using WebShop.Domain.Entities;
 
 namespace WebShop.Infrastructure.Observer.Notification;
-
-//TODO: Remove?
-
 public class SmsNotificationObserver : INotificationObserver<Product>
 {
     public void Update(Product entity)

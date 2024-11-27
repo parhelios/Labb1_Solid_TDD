@@ -4,6 +4,7 @@ using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
 using WebShop.Infrastructure.Interfaces;
 using WebShop.Infrastructure.Observer;
+using WebShop.Infrastructure.Observer.ObserverPatternData;
 
 namespace WebShop.Controllers;
 
@@ -35,7 +36,7 @@ public class ProductController(IUnitOfWork uow, ISubjectManager subjectManager) 
     public async Task<ActionResult> AddProduct([FromBody] Product product)
     {
         var testData = new PopulateObserverData(subjectManager);
-        testData.Populate();
+        testData.PopulateAllObservers();
 
         if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
             return BadRequest("Invalid product data.");

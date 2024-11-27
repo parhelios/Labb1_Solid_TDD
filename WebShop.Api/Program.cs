@@ -11,20 +11,14 @@ using WebShop.Infrastructure.UnitOfWork;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-
-//TODO: Rensa upp överflödiga services
-
-// Registrera Unit of Work i DI-container
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 builder.Services.AddScoped<ISubjectFactory, SubjectFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(ISubjectManager), typeof(SubjectManager));
 builder.Services.AddTransient<INotificationObserver<Product>, EmailNotificationObserver>();
-builder.Services.AddSingleton<ISubject<Product>, ProductSubject>(); //TODO: Remove?
+// builder.Services.AddSingleton<ISubject<Product>, ProductSubject>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
