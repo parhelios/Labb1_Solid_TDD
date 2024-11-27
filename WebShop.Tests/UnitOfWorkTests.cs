@@ -68,7 +68,6 @@ public class UnitOfWorkTests
         
         // Assert
         A.CallTo(() => _fakeUow.CommitAsync()).MustHaveHappenedOnceExactly();
-
     }
     
     [Fact]
@@ -84,5 +83,4 @@ public class UnitOfWorkTests
         // Assert
         A.CallTo(() => _fakeUow.Dispose()).MustHaveHappenedOnceExactly();
     }
-
 }
