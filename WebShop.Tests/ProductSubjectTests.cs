@@ -1,6 +1,4 @@
-﻿using WebShop.Application.Interfaces;
-using WebShop.Application.Subjects;
-using WebShop.Domain.Entities;
+﻿using WebShop.Application.Subjects;
 
 namespace WebShop.Tests;
 
