@@ -18,7 +18,7 @@ builder.Services.AddScoped<ISubjectFactory, SubjectFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(ISubjectManager), typeof(SubjectManager));
 builder.Services.AddTransient<INotificationObserver<Product>, EmailNotificationObserver>();
-// builder.Services.AddSingleton<ISubject<Product>, ProductSubject>();
+builder.Services.AddSingleton<ISubject<Product>, ProductSubject>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

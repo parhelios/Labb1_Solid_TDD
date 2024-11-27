@@ -6,10 +6,8 @@ namespace WebShop.Tests;
 
 public class ProductSubjectTests
 {
-    private readonly ISubject<Product> _subject = new ProductSubject();
-    
     [Fact]
-    public void TestProductSubjectSingletonReturnsSameInstance()
+    public void TestProductSubjectSingleton_ReturnsSameInstance()
     {
         // Act
         var instance1 = ProductSubject.Instance;
