@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using WebShop.Application.Interfaces;
+using WebShop.Application.Observers.ObserverPatternData;
 using WebShop.Domain.Entities;
 using WebShop.Infrastructure.Interfaces;
-using WebShop.Infrastructure.Observers.ObserverPatternData;
 
-namespace WebShop.Controllers;
+namespace WebShop.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -1,7 +1,7 @@
 ﻿using WebShop.Application.Interfaces;
 using WebShop.Domain.Entities;
 
-namespace WebShop.Application.Subjects;
+namespace WebShop.Application.ObserverSubjects;
 
 public class SubjectFactory : ISubjectFactory
 {

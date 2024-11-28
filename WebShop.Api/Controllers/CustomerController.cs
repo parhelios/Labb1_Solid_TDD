@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebShop.Domain.Entities;
 using WebShop.Infrastructure.Interfaces;
 
-namespace WebShop.Controllers;
+namespace WebShop.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

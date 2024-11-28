@@ -2,7 +2,7 @@
 using WebShop.Domain.Entities;
 using WebShop.Domain.Interfaces;
 
-namespace WebShop.Application.Subjects;
+namespace WebShop.Application.ObserverSubjects;
 
 public class ProductSubject : ISubject<Product>
 {

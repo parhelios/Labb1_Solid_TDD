@@ -1,6 +1,6 @@
 ﻿using FakeItEasy;
 using WebShop.Application.Interfaces;
-using WebShop.Application.Subjects;
+using WebShop.Application.ObserverSubjects;
 using WebShop.Domain.Entities;
 using WebShop.Domain.Interfaces;
 

@@ -1,4 +1,4 @@
-﻿using WebShop.Application.Subjects;
+﻿using WebShop.Application.ObserverSubjects;
 
 namespace WebShop.Tests;
 
