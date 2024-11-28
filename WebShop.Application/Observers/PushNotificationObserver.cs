@@ -1,7 +1,7 @@
 ﻿using WebShop.Domain.Entities;
 using WebShop.Domain.Interfaces;
 
-namespace WebShop.Infrastructure.Observers;
+namespace WebShop.Application.Observers;
 public class PushNotificationObserver : INotificationObserver<Product>
 {
     public void Update(Product entity)
